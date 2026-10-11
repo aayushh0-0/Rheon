@@ -106,13 +106,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <aside className="w-full md:w-64 h-full bg-shell-bg border-r border-shell-border flex flex-col p-4 shrink-0 select-none overflow-hidden">
-      {/* Top: Logo (fixed) */}
+      {/* Top: Logo (fixed, centered mark) */}
       <div className="flex items-center gap-3 px-3 py-2 shrink-0">
         <div className="w-10 h-10 rounded-2xl overflow-hidden shadow-pill flex items-center justify-center bg-white border border-shell-border shrink-0">
           <img
             src="/logo.png"
             alt="RHEON AI Logo"
-            className="w-full h-full object-contain p-0.5"
+            className="w-8 h-8 object-contain object-center"
           />
         </div>
         <div className="min-w-0">
@@ -183,7 +183,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
       </div>
 
-      {/* Bottom: User Profile (always visible, never cut off) */}
+      {/* Bottom: User Profile (always visible) */}
       <div className="shrink-0 mt-3 pt-3 border-t border-shell-border">
         <div className="flex items-center justify-between p-2 rounded-2xl bg-white border border-shell-border shadow-card hover:border-teal-brand/30 transition-colors">
           <div className="flex items-center gap-2.5 min-w-0 flex-1">

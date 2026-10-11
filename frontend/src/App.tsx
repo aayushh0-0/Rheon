@@ -47,24 +47,16 @@ export const App: React.FC = () => {
       ]);
       setMetrics(m);
 
-      // Map API summary to widget distribution data with distinct blood-group colors
+      // Map API summary to widget distribution data
       const GROUP_COLORS: Record<string, string> = {
-        'O+': '#0F766E',
-        'O-': '#C62828',
-        'A+': '#1565C0',
-        'A-': '#6A1B9A',
-        'B+': '#EF6C00',
-        'B-': '#00838F',
-        'AB+': '#2E7D32',
-        'AB-': '#AD1457',
+        'O+': '#0F766E', 'O-': '#C62828', 'A+': '#1565C0', 'A-': '#6A1B9A',
+        'B+': '#EF6C00', 'B-': '#00838F', 'AB+': '#2E7D32', 'AB-': '#AD1457',
       };
       const totalUnits = invRaw.reduce((acc, curr) => acc + curr.total_usable_units, 0);
       const mappedInv = invRaw.map(item => ({
         group: item.blood_group as any,
         units: item.total_usable_units,
-        percentage: totalUnits > 0
-          ? Math.round((item.total_usable_units / totalUnits) * 1000) / 10
-          : 0,
+        percentage: totalUnits > 0 ? Math.round((item.total_usable_units / totalUnits) * 1000) / 10 : 0,
         color: GROUP_COLORS[item.blood_group] || (item.status === 'CRITICAL' ? '#C62828' : '#0F766E'),
         usableUnits: item.total_usable_units,
       }));
@@ -84,17 +76,20 @@ export const App: React.FC = () => {
   }, [loadData]);
 
   const handleCreateRequest = async (newReq: BloodRequestCreate) => {
-    const created = await createEmergencyRequest(newReq);
-    // @ts-ignore: mapping created response to EmergencyRequest
-    setRequests((prev) => [created, ...prev]);
-    // Increment active emergency demands count
-    setMetrics((prev) =>
-      prev.map((m) =>
-        m.id === 'critical-requests'
-          ? { ...m, value: `${parseInt(String(m.value), 10) + 1}` }
-          : m
-      )
-    );
+    try {
+      const created = await createEmergencyRequest(newReq);
+      setRequests((prev) => [created, ...prev]);
+      // Increment active emergency demands count
+      setMetrics((prev) =>
+        prev.map((m) =>
+          m.id === 'critical-requests'
+            ? { ...m, value: `${parseInt(String(m.value), 10) + 1}` }
+            : m
+        )
+      );
+    } catch (err) {
+      console.error('Failed to create emergency request', err);
+    }
   };
 
   return (
