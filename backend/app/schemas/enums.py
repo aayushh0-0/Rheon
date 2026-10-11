@@ -1,0 +1,70 @@
+from enum import Enum
+
+
+class BloodGroup(str, Enum):
+    O_POS = "O+"
+    O_NEG = "O-"
+    A_POS = "A+"
+    A_NEG = "A-"
+    B_POS = "B+"
+    B_NEG = "B-"
+    AB_POS = "AB+"
+    AB_NEG = "AB-"
+
+
+class ComponentType(str, Enum):
+    RBC = "RBC"
+    PRBC = "PRBC"
+    FFP = "FFP"
+    PLATELETS = "PLATELETS"
+    CRYO = "CRYO"
+
+
+class UrgencyLevel(str, Enum):
+    ROUTINE = "ROUTINE"
+    URGENT = "URGENT"
+    CRITICAL = "CRITICAL"
+    CRITICAL_IMMEDIATE = "CRITICAL_IMMEDIATE"
+    URGENT_SURGICAL = "URGENT_SURGICAL"
+    ELEVATED_STABILIZATION = "ELEVATED_STABILIZATION"
+
+
+class InventoryStatus(str, Enum):
+    HEALTHY = "HEALTHY"
+    LOW = "LOW"
+    CRITICAL = "CRITICAL"
+    OUT_OF_STOCK = "OUT_OF_STOCK"
+    EXPIRED = "EXPIRED"
+
+
+class OperationalStatus(str, Enum):
+    ONLINE = "ONLINE"
+    DEGRADED = "DEGRADED"
+    OFFLINE = "OFFLINE"
+
+
+class RequestStatus(str, Enum):
+    PENDING = "PENDING"
+    PLANNED = "PLANNED"
+    DISPATCHED = "DISPATCHED"
+    FULFILLED = "FULFILLED"
+    CANCELLED = "CANCELLED"
+
+
+class TransportMode(str, Enum):
+    AMBULANCE_SIREN = "AMBULANCE_SIREN"
+    AMBULANCE_ROUTINE = "AMBULANCE_ROUTINE"
+    REFRIGERATED_VAN = "REFRIGERATED_VAN"
+    MOTORCYCLE_COURIER = "MOTORCYCLE_COURIER"
+    STANDARD_COURIER = "STANDARD_COURIER"
+    DRONE = "DRONE"
+
+
+class EventType(str, Enum):
+    FACILITY_OFFLINE = "FACILITY_OFFLINE"
+    SOURCE_UNAVAILABLE = "SOURCE_UNAVAILABLE"
+    ROUTE_BLOCKED = "ROUTE_BLOCKED"
+    ROUTE_DELAY = "ROUTE_DELAY"
+    DEMAND_SURGE = "DEMAND_SURGE"
+    INVENTORY_DEPLETION = "INVENTORY_DEPLETION"
+    INVENTORY_DROP = "INVENTORY_DROP"
