@@ -11,7 +11,6 @@ import {
   Building2,
   Users,
   Settings,
-  HeartPulse
 } from 'lucide-react';
 import { NavItem } from '../../types';
 
@@ -106,30 +105,33 @@ export const Sidebar: React.FC<SidebarProps> = ({
   ];
 
   return (
-    <aside className="w-full md:w-64 bg-shell-bg border-r border-shell-border flex flex-col justify-between p-4 shrink-0 select-none">
-      <div className="flex flex-col gap-6">
-        {/* Logo / Brand Header */}
-        <div className="flex items-center gap-3 px-3 py-2">
-          <div className="w-10 h-10 rounded-2xl bg-teal-brand flex items-center justify-center text-white shadow-pill relative overflow-hidden group">
-            <HeartPulse className="w-5 h-5 text-rose-300 animate-pulse-slow" />
-            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent"></div>
-          </div>
-          <div>
-            <div className="flex items-center gap-1.5">
-              <span className="font-extrabold text-base tracking-tight text-ink-primary font-sans">
-                RHEON AI
-              </span>
-              <span className="px-1.5 py-0.2 text-[9px] font-bold tracking-widest bg-crimson text-white rounded font-mono">
-                NCR
-              </span>
-            </div>
-            <p className="text-[11px] font-medium text-ink-secondary leading-tight">
-              Emergency Blood Logistics
-            </p>
-          </div>
+    <aside className="w-full md:w-64 h-full bg-shell-bg border-r border-shell-border flex flex-col p-4 shrink-0 select-none overflow-hidden">
+      {/* Top: Logo (fixed) */}
+      <div className="flex items-center gap-3 px-3 py-2 shrink-0">
+        <div className="w-10 h-10 rounded-2xl overflow-hidden shadow-pill flex items-center justify-center bg-white border border-shell-border shrink-0">
+          <img
+            src="/logo.png"
+            alt="RHEON AI Logo"
+            className="w-full h-full object-contain p-0.5"
+          />
         </div>
+        <div className="min-w-0">
+          <div className="flex items-center gap-1.5">
+            <span className="font-extrabold text-base tracking-tight text-ink-primary font-sans">
+              RHEON AI
+            </span>
+            <span className="px-1.5 py-0.2 text-[9px] font-bold tracking-widest bg-crimson text-white rounded font-mono">
+              NCR
+            </span>
+          </div>
+          <p className="text-[11px] font-medium text-ink-secondary leading-tight">
+            Emergency Blood Logistics
+          </p>
+        </div>
+      </div>
 
-        {/* Navigation Sections */}
+      {/* Middle: Navigation (scrollable if needed) */}
+      <div className="flex-1 min-h-0 overflow-y-auto mt-4 pr-0.5">
         <div className="flex flex-col gap-5">
           {navSections.map((section) => (
             <div key={section.title} className="flex flex-col gap-1">
@@ -144,10 +146,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     <button
                       key={item.id}
                       onClick={() => onSelectTab(item.id)}
-                      className={`group flex items-center justify-between px-3.5 py-2.5 rounded-full text-xs font-semibold transition-all duration-200 ${
+                      className={`group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
                         isActive
                           ? 'bg-teal-brand text-white shadow-pill'
-                          : 'text-ink-secondary hover:text-ink-primary hover:bg-white/70'
+                          : 'text-ink-primary hover:bg-white hover:shadow-card'
                       }`}
                     >
                       <div className="flex items-center gap-2.5">
@@ -181,15 +183,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
       </div>
 
-      {/* User Profile / Admin Bottom Card */}
-      <div className="mt-6 pt-4 border-t border-shell-border flex flex-col gap-2">
+      {/* Bottom: User Profile (always visible, never cut off) */}
+      <div className="shrink-0 mt-3 pt-3 border-t border-shell-border">
         <div className="flex items-center justify-between p-2 rounded-2xl bg-white border border-shell-border shadow-card hover:border-teal-brand/30 transition-colors">
-          <div className="flex items-center gap-2.5 overflow-hidden">
+          <div className="flex items-center gap-2.5 min-w-0 flex-1">
             <div className="relative w-8 h-8 rounded-full bg-teal-brand/10 border border-teal-brand/20 flex items-center justify-center text-teal-brand font-bold text-xs shrink-0">
               AR
               <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-white"></span>
             </div>
-            <div className="truncate">
+            <div className="min-w-0 flex-1">
               <p className="text-xs font-bold text-ink-primary truncate">
                 Dr. Ayush Rawat
               </p>
@@ -200,7 +202,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
           <button
             title="Account Settings"
-            className="p-1.5 text-ink-secondary hover:text-teal-brand hover:bg-shell-bg rounded-lg transition-colors"
+            className="p-1.5 text-ink-secondary hover:text-teal-brand hover:bg-shell-bg rounded-lg transition-colors shrink-0 ml-1"
           >
             <Settings className="w-3.5 h-3.5" />
           </button>

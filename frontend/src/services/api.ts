@@ -163,6 +163,18 @@ export const initialMetrics: MetricCardData[] = [
   },
 ];
 
+
+export const initialInventorySummary: InventorySummary[] = [
+  { blood_group: 'O+', component_type: 'RBC', total_available_units: 312, total_safety_reserve: 40, total_usable_units: 272, status: 'HEALTHY', facility_count: 8 },
+  { blood_group: 'O-', component_type: 'RBC', total_available_units: 98, total_safety_reserve: 30, total_usable_units: 68, status: 'CRITICAL', facility_count: 6 },
+  { blood_group: 'A+', component_type: 'RBC', total_available_units: 245, total_safety_reserve: 35, total_usable_units: 210, status: 'HEALTHY', facility_count: 7 },
+  { blood_group: 'A-', component_type: 'RBC', total_available_units: 72, total_safety_reserve: 20, total_usable_units: 52, status: 'LOW', facility_count: 5 },
+  { blood_group: 'B+', component_type: 'RBC', total_available_units: 198, total_safety_reserve: 28, total_usable_units: 170, status: 'HEALTHY', facility_count: 7 },
+  { blood_group: 'B-', component_type: 'RBC', total_available_units: 54, total_safety_reserve: 18, total_usable_units: 36, status: 'LOW', facility_count: 4 },
+  { blood_group: 'AB+', component_type: 'RBC', total_available_units: 86, total_safety_reserve: 15, total_usable_units: 71, status: 'HEALTHY', facility_count: 5 },
+  { blood_group: 'AB-', component_type: 'RBC', total_available_units: 41, total_safety_reserve: 12, total_usable_units: 29, status: 'CRITICAL', facility_count: 3 },
+];
+
 export const initialDemandTrends: DemandDayData[] = [
   { day: 'Monday', shortDay: 'Mon', requests: 18, units: 48, isCurrent: false, routedPct: 100 },
   { day: 'Tuesday', shortDay: 'Tue', requests: 22, units: 64, isCurrent: false, routedPct: 100 },
@@ -181,10 +193,12 @@ export const getMetrics = async (): Promise<MetricCardData[]> => {
 
 export const getInventorySummary = async (componentType: string = 'RBC'): Promise<InventorySummary[]> => {
   try {
-    return await apiClient.get<InventorySummary[]>(`/inventory/summary?component_type=${componentType}`);
+    const data = await apiClient.get<InventorySummary[]>(`/inventory/summary?component_type=${componentType}`);
+    if (Array.isArray(data) && data.length > 0) return data;
+    return [...initialInventorySummary];
   } catch (error) {
-    console.error('Failed to fetch inventory summary', error);
-    return [];
+    console.error('Failed to fetch inventory summary, using mock data', error);
+    return [...initialInventorySummary];
   }
 };
 
@@ -194,7 +208,14 @@ export const getDemandTrend = async (): Promise<DemandDayData[]> => {
 };
 
 export const getEmergencyRequests = async (): Promise<EmergencyRequest[]> => {
-  return await apiClient.get<EmergencyRequest[]>('/requests');
+  try {
+    const data = await apiClient.get<EmergencyRequest[]>('/requests');
+    if (Array.isArray(data) && data.length > 0) return data;
+    return [...initialEmergencyRequests];
+  } catch (error) {
+    console.error('Failed to fetch emergency requests, using mock data', error);
+    return [...initialEmergencyRequests];
+  }
 };
 
 export const createEmergencyRequest = async (newReq: any): Promise<EmergencyRequest> => {

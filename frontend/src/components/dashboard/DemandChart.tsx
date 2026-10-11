@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { MoreHorizontal, Zap, ShieldCheck, Timer } from 'lucide-react';
 import { DemandDayData } from '../../types';
 
@@ -7,11 +7,19 @@ interface DemandChartProps {
 }
 
 export const DemandChart: React.FC<DemandChartProps> = ({ data }) => {
-  const [activeDay, setActiveDay] = useState<DemandDayData | null>(
-    data.find((d) => d.isCurrent) || data[4]
-  );
+  const safeData = useMemo(() => (Array.isArray(data) && data.length > 0 ? data : []), [data]);
 
-  const maxRequests = Math.max(...data.map((d) => d.requests), 40);
+  const [activeDay, setActiveDay] = useState<DemandDayData | null>(null);
+
+  useEffect(() => {
+    if (safeData.length === 0) {
+      setActiveDay(null);
+      return;
+    }
+    setActiveDay(safeData.find((d) => d.isCurrent) || safeData[Math.min(4, safeData.length - 1)]);
+  }, [safeData]);
+
+  const maxRequests = Math.max(...safeData.map((d) => d.requests), 1, 40);
 
   return (
     <div className="bg-white rounded-3xl p-6 border border-shell-border shadow-card flex flex-col justify-between h-full">
@@ -53,7 +61,7 @@ export const DemandChart: React.FC<DemandChartProps> = ({ data }) => {
 
         {/* Chart Bars Grid */}
         <div className="flex items-end justify-between gap-2 sm:gap-4 h-44 px-2 border-b border-shell-border">
-          {data.map((item) => {
+          {safeData.map((item) => {
             const heightPct = (item.requests / maxRequests) * 100;
             const isSelected = activeDay?.day === item.day;
             const isCurrent = item.isCurrent;

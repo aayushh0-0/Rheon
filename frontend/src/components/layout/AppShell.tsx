@@ -23,9 +23,9 @@ export const AppShell: React.FC<AppShellProps> = ({
   children,
 }) => {
   return (
-    <div className="min-h-screen bg-canvas-sage p-3 sm:p-5 md:p-6 lg:p-8 flex items-center justify-center font-sans antialiased">
-      {/* Centered Desktop Application Frame */}
-      <div className="w-full max-w-[1360px] bg-shell-bg rounded-3xl md:rounded-4xl shadow-shell border border-white/80 overflow-hidden flex flex-col md:flex-row min-h-[880px] lg:min-h-[940px]">
+    <div className="h-screen w-screen bg-canvas-sage p-2 sm:p-3 md:p-4 lg:p-5 flex items-stretch justify-center font-sans antialiased overflow-hidden">
+      {/* Full-viewport Application Frame */}
+      <div className="w-full max-w-[1600px] h-full bg-shell-bg rounded-2xl md:rounded-3xl shadow-shell border border-white/80 overflow-hidden flex flex-col md:flex-row">
         {/* Integrated Light Sidebar */}
         <Sidebar
           activeTab={activeTab}
@@ -34,7 +34,7 @@ export const AppShell: React.FC<AppShellProps> = ({
         />
 
         {/* Main Application Area */}
-        <div className="flex-1 flex flex-col min-w-0 bg-shell-bg">
+        <div className="flex-1 flex flex-col min-w-0 min-h-0 bg-shell-bg">
           {/* Header Bar */}
           <Header
             onNewRequest={onNewRequest}
@@ -43,7 +43,7 @@ export const AppShell: React.FC<AppShellProps> = ({
           />
 
           {/* Dynamic Content Container */}
-          <main className="flex-1 p-5 md:p-7 overflow-y-auto">
+          <main className="flex-1 p-4 md:p-6 lg:p-7 overflow-y-auto min-h-0">
             {children}
           </main>
         </div>

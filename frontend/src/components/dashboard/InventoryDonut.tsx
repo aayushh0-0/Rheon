@@ -13,6 +13,12 @@ export const InventoryDonut: React.FC<InventoryDonutProps> = ({
 }) => {
   const [hoveredGroup, setHoveredGroup] = useState<string | null>(null);
 
+  const safeDistribution = Array.isArray(distribution) ? distribution : [];
+  const computedTotal =
+    safeDistribution.length > 0
+      ? safeDistribution.reduce((acc, d) => acc + (d.usableUnits || d.units || 0), 0)
+      : totalUsableUnits;
+
   // Calculate SVG Donut Chart Slices
   const size = 180;
   const strokeWidth = 24;
@@ -58,7 +64,7 @@ export const InventoryDonut: React.FC<InventoryDonutProps> = ({
             />
 
             {/* Segmented Slices */}
-            {distribution.map((item) => {
+            {safeDistribution.map((item) => {
               const strokeDasharray = `${(item.percentage / 100) * circumference} ${circumference}`;
               const strokeDashoffset = -((accumulatedPercent / 100) * circumference);
               accumulatedPercent += item.percentage;
@@ -89,8 +95,8 @@ export const InventoryDonut: React.FC<InventoryDonutProps> = ({
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
             <span className="text-2xl font-extrabold text-ink-primary tracking-tight font-sans">
               {hoveredGroup
-                ? distribution.find((d) => d.group === hoveredGroup)?.units
-                : totalUsableUnits.toLocaleString()}
+                ? safeDistribution.find((d) => d.group === hoveredGroup)?.units
+                : computedTotal.toLocaleString()}
             </span>
             <span className="text-[11px] font-semibold text-ink-secondary uppercase tracking-wider">
               {hoveredGroup ? `${hoveredGroup} Units` : 'Usable Units'}
@@ -104,7 +110,7 @@ export const InventoryDonut: React.FC<InventoryDonutProps> = ({
 
         {/* Legend Grid */}
         <div className="grid grid-cols-2 gap-x-4 gap-y-2 w-full max-w-[240px]">
-          {distribution.map((item) => (
+          {safeDistribution.map((item) => (
             <div
               key={item.group}
               onMouseEnter={() => setHoveredGroup(item.group)}

@@ -47,14 +47,26 @@ export const App: React.FC = () => {
       ]);
       setMetrics(m);
 
-      // Map API summary to widget distribution data
-      const totalUnits = invRaw.reduce((acc, curr) => acc + curr.total_available_units, 0);
+      // Map API summary to widget distribution data with distinct blood-group colors
+      const GROUP_COLORS: Record<string, string> = {
+        'O+': '#0F766E',
+        'O-': '#C62828',
+        'A+': '#1565C0',
+        'A-': '#6A1B9A',
+        'B+': '#EF6C00',
+        'B-': '#00838F',
+        'AB+': '#2E7D32',
+        'AB-': '#AD1457',
+      };
+      const totalUnits = invRaw.reduce((acc, curr) => acc + curr.total_usable_units, 0);
       const mappedInv = invRaw.map(item => ({
-        group: item.blood_group as any, // BloodGroup type
-        units: item.total_available_units,
-        percentage: totalUnits > 0 ? (item.total_available_units / totalUnits) * 100 : 0,
-        color: item.status === 'CRITICAL' ? '#8A2E3B' : '#32591B', // Basic status-to-color mapping
-        usableUnits: item.total_usable_units
+        group: item.blood_group as any,
+        units: item.total_usable_units,
+        percentage: totalUnits > 0
+          ? Math.round((item.total_usable_units / totalUnits) * 1000) / 10
+          : 0,
+        color: GROUP_COLORS[item.blood_group] || (item.status === 'CRITICAL' ? '#C62828' : '#0F766E'),
+        usableUnits: item.total_usable_units,
       }));
       setInventoryDistribution(mappedInv);
 
