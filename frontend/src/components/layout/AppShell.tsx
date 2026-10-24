@@ -10,6 +10,8 @@ interface AppShellProps {
   searchQuery: string;
   onSearchChange: (q: string) => void;
   criticalCount?: number;
+  onLogout?: () => void;
+  onSwitchRole?: (role: 'patient' | 'verifier') => void;
   children: React.ReactNode;
 }
 
@@ -20,6 +22,8 @@ export const AppShell: React.FC<AppShellProps> = ({
   searchQuery,
   onSearchChange,
   criticalCount = 14,
+  onLogout,
+  onSwitchRole,
   children,
 }) => {
   return (
@@ -31,6 +35,8 @@ export const AppShell: React.FC<AppShellProps> = ({
           activeTab={activeTab}
           onSelectTab={onSelectTab}
           criticalCount={criticalCount}
+          onLogout={onLogout}
+          onSwitchRole={onSwitchRole}
         />
 
         {/* Main Application Area */}

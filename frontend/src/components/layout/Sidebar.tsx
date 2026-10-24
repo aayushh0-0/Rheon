@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   LayoutDashboard,
   Flame,
@@ -11,6 +11,10 @@ import {
   Building2,
   Users,
   Settings,
+  LogOut,
+  HeartPulse,
+  ClipboardCheck,
+  ChevronDown,
 } from 'lucide-react';
 import { NavItem } from '../../types';
 
@@ -18,13 +22,18 @@ interface SidebarProps {
   activeTab: NavItem;
   onSelectTab: (tab: NavItem) => void;
   criticalCount?: number;
+  onLogout?: () => void;
+  onSwitchRole?: (role: 'patient' | 'verifier') => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
   activeTab,
   onSelectTab,
   criticalCount = 14,
+  onLogout,
+  onSwitchRole,
 }) => {
+  const [showUserMenu, setShowUserMenu] = useState(false);
   const navSections = [
     {
       title: 'MAIN MENU',
@@ -184,7 +193,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
       {/* Bottom: User Profile (always visible) */}
-      <div className="shrink-0 mt-3 pt-3 border-t border-shell-border">
+      <div className="shrink-0 mt-3 pt-3 border-t border-shell-border relative">
         <div className="flex items-center justify-between p-2 rounded-2xl bg-white border border-shell-border shadow-card hover:border-teal-brand/30 transition-colors">
           <div className="flex items-center gap-2.5 min-w-0 flex-1">
             <div className="relative w-8 h-8 rounded-full bg-teal-brand/10 border border-teal-brand/20 flex items-center justify-center text-teal-brand font-bold text-xs shrink-0">
@@ -201,12 +210,59 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </div>
           </div>
           <button
-            title="Account Settings"
+            title="Account Settings & Session"
+            onClick={() => setShowUserMenu(!showUserMenu)}
             className="p-1.5 text-ink-secondary hover:text-teal-brand hover:bg-shell-bg rounded-lg transition-colors shrink-0 ml-1"
           >
-            <Settings className="w-3.5 h-3.5" />
+            {showUserMenu ? <ChevronDown className="w-3.5 h-3.5" /> : <Settings className="w-3.5 h-3.5" />}
           </button>
         </div>
+
+        {/* Dropdown Menu */}
+        {showUserMenu && (
+          <div className="absolute bottom-full left-0 right-0 mb-2 bg-white border border-shell-border rounded-2xl shadow-xl p-2 z-30 animate-in fade-in zoom-in-95">
+            <div className="px-2 py-1.5 text-[11px] border-b border-shell-border mb-1 text-ink-secondary">
+              Role: <strong className="text-teal-brand">System Administrator</strong>
+            </div>
+            {onSwitchRole && (
+              <>
+                <button
+                  onClick={() => {
+                    setShowUserMenu(false);
+                    onSwitchRole('patient');
+                  }}
+                  className="w-full text-left px-2 py-1.5 text-xs rounded-lg hover:bg-shell-bg text-ink-primary font-medium flex items-center gap-2"
+                >
+                  <HeartPulse className="w-3.5 h-3.5 text-crimson" />
+                  Switch to Patient
+                </button>
+                <button
+                  onClick={() => {
+                    setShowUserMenu(false);
+                    onSwitchRole('verifier');
+                  }}
+                  className="w-full text-left px-2 py-1.5 text-xs rounded-lg hover:bg-shell-bg text-ink-primary font-medium flex items-center gap-2"
+                >
+                  <ClipboardCheck className="w-3.5 h-3.5 text-teal-brand" />
+                  Switch to Verifier
+                </button>
+                <div className="my-1 border-t border-shell-border" />
+              </>
+            )}
+            {onLogout && (
+              <button
+                onClick={() => {
+                  setShowUserMenu(false);
+                  onLogout();
+                }}
+                className="w-full text-left px-2 py-1.5 text-xs rounded-lg hover:bg-pastel-rose-bg text-crimson font-bold flex items-center gap-2"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                Sign Out
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </aside>
   );
