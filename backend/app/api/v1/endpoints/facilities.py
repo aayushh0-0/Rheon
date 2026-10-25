@@ -54,6 +54,37 @@ def get_hospital(
     return hospital
 
 
+@router.get(
+    "/hospitals/{hospital_id}/map",
+    summary="Get Hospital Google Maps Integration",
+    description="Returns Google Maps search and directions URLs for hospital navigation.",
+)
+def get_hospital_map(
+    hospital_id: str,
+    db: Session = Depends(get_db),
+):
+    hospital = db.query(Hospital).filter(Hospital.id == hospital_id).first()
+    if not hospital:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Hospital with id '{hospital_id}' not found.",
+        )
+    lat = hospital.latitude
+    lng = hospital.longitude
+    name = hospital.name
+    query = f"{name}, {hospital.location}".replace(" ", "+")
+    return {
+        "hospital_id": hospital.id,
+        "name": hospital.name,
+        "location": hospital.location,
+        "latitude": lat,
+        "longitude": lng,
+        "google_maps_url": hospital.google_maps_url or f"https://www.google.com/maps/search/?api=1&query={lat},{lng}",
+        "google_maps_embed_url": hospital.google_maps_embed_url or f"https://maps.google.com/maps?q={lat},{lng}&z=15&output=embed",
+        "directions_query_url": f"https://www.google.com/maps/dir/?api=1&destination={lat},{lng}&destination_place_id={query}",
+    }
+
+
 @router.post(
     "/hospitals",
     response_model=HospitalResponse,

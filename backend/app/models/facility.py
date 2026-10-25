@@ -15,6 +15,8 @@ class Hospital(Base, TimestampMixin):
     longitude = Column(Float, nullable=False)
     contact_phone = Column(String(32), nullable=False)
     emergency_capacity = Column(String(64), nullable=True, default="STANDARD")
+    google_maps_url = Column(String(256), nullable=True)
+    google_maps_embed_url = Column(String(512), nullable=True)
     is_active = Column(Boolean, default=True, nullable=False)
 
     # Relationships

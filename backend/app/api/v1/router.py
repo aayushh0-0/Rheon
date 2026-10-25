@@ -9,6 +9,7 @@ from app.api.v1.endpoints.matching import router as matching_router
 from app.api.v1.endpoints.planning import router as planning_router
 from app.api.v1.endpoints.events import router as events_router
 from app.api.v1.endpoints.agents import router as agents_router
+from app.api.v1.endpoints.medical import router as medical_router
 
 api_router = APIRouter()
 
@@ -40,3 +41,4 @@ api_router.include_router(matching_router)
 api_router.include_router(planning_router)
 api_router.include_router(events_router)
 api_router.include_router(agents_router)
+api_router.include_router(medical_router)

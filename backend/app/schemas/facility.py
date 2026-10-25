@@ -13,6 +13,8 @@ class HospitalBase(BaseModel):
     longitude: float
     contact_phone: str
     emergency_capacity: Optional[str] = "STANDARD"
+    google_maps_url: Optional[str] = None
+    google_maps_embed_url: Optional[str] = None
     is_active: bool = True
 
 
