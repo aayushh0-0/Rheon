@@ -11,6 +11,7 @@ import {
   CheckCircle2,
   Radio,
   Package,
+  ExternalLink,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { PatientEmergencyRequest } from '../../types/auth';
@@ -28,15 +29,31 @@ interface LiveMilestone {
   title: string;
   desc: string;
   status: MilestoneStatus;
-  atProgress: number; // 0-100 when this completes
 }
 
-/**
- * Live delivery simulator:
- * - progresses every second from request creation / session start
- * - writes status + ETA back into AuthContext so My Requests / Admin queue stay in sync
- * - FULFILLED when progress hits 100%
- */
+function hospitalMapsUrl(name: string) {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(name + ' Delhi NCR')}`;
+}
+
+function sourceMapsUrl(name: string) {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(name || 'Blood Bank Delhi')}`;
+}
+
+/** Point along cubic bezier (same as SVG path) for marker placement */
+function cubicPoint(
+  t: number,
+  p0: { x: number; y: number },
+  p1: { x: number; y: number },
+  p2: { x: number; y: number },
+  p3: { x: number; y: number }
+) {
+  const u = 1 - t;
+  return {
+    x: u * u * u * p0.x + 3 * u * u * t * p1.x + 3 * u * t * t * p2.x + t * t * t * p3.x,
+    y: u * u * u * p0.y + 3 * u * u * t * p1.y + 3 * u * t * t * p2.y + t * t * t * p3.y,
+  };
+}
+
 export const PatientTrackingView: React.FC<PatientTrackingViewProps> = ({
   requestId,
   onGoToRequests,
@@ -47,9 +64,8 @@ export const PatientTrackingView: React.FC<PatientTrackingViewProps> = ({
     ? patientRequests.find((r) => r.id === requestId)
     : patientRequests[0];
 
-  const totalSeconds = Math.max(30, (request?.actual_eta_mins || request?.max_eta_minutes || 15) * 6); // demo: 6s per planned minute, min 30s
+  const totalSeconds = Math.max(45, (request?.actual_eta_mins || request?.max_eta_minutes || 15) * 5);
   const storageKey = request ? `rheon_track_start_${request.id}` : '';
-
   const [now, setNow] = useState(Date.now());
 
   useEffect(() => {
@@ -68,29 +84,24 @@ export const PatientTrackingView: React.FC<PatientTrackingViewProps> = ({
   }, [storageKey, request?.id]);
 
   const elapsed = Math.max(0, (now - startMs) / 1000);
-  const progress = request?.status === 'FULFILLED' ? 100 : Math.min(100, Math.round((elapsed / totalSeconds) * 100));
+  const progress =
+    request?.status === 'FULFILLED' ? 100 : Math.min(100, Math.round((elapsed / totalSeconds) * 100));
   const etaLeft = request?.status === 'FULFILLED' ? 0 : Math.max(0, Math.ceil(totalSeconds - elapsed));
 
-  // Push live status into shared store (impacts request list / admin)
   useEffect(() => {
-    if (!request) return;
-    if (request.status === 'CANCELLED') return;
-
+    if (!request || request.status === 'CANCELLED') return;
     let nextStatus = request.status;
     if (progress >= 100) nextStatus = 'FULFILLED';
     else if (progress >= 15) nextStatus = 'DISPATCHED';
     else if (progress >= 5) nextStatus = 'ALLOCATED';
-    else nextStatus = request.status === 'PENDING' ? 'PENDING' : request.status;
 
-    const nextEta = Math.max(1, Math.ceil(etaLeft / 6)); // map demo seconds back to "minutes" display
+    const nextEta = Math.max(1, Math.ceil(etaLeft / 5));
     const patch: Partial<PatientEmergencyRequest> = {};
     if (nextStatus !== request.status) patch.status = nextStatus;
     if (request.status !== 'FULFILLED' && nextEta !== request.actual_eta_mins) {
       patch.actual_eta_mins = nextStatus === 'FULFILLED' ? 0 : nextEta;
     }
-    if (Object.keys(patch).length) {
-      updatePatientRequest(request.id, patch);
-    }
+    if (Object.keys(patch).length) updatePatientRequest(request.id, patch);
   }, [progress, etaLeft, request, updatePatientRequest]);
 
   if (!request) {
@@ -113,52 +124,54 @@ export const PatientTrackingView: React.FC<PatientTrackingViewProps> = ({
 
   const isFulfilled = progress >= 100 || request.status === 'FULFILLED';
   const mode = (request.transport_mode || 'DRONE').toUpperCase();
+  const isDrone = mode.includes('DRONE');
+
+  // SVG coordinate system 0..1000 x 0..280 — clean left-to-right arc
+  const p0 = { x: 80, y: 200 };
+  const p1 = { x: 280, y: 200 };
+  const p2 = { x: 620, y: 70 };
+  const p3 = { x: 900, y: 70 };
+  const tProg = progress / 100;
+  const marker = cubicPoint(tProg, p0, p1, p2, p3);
+  const pathD = `M ${p0.x} ${p0.y} C ${p1.x} ${p1.y}, ${p2.x} ${p2.y}, ${p3.x} ${p3.y}`;
 
   const milestones: LiveMilestone[] = [
     {
       id: 'logged',
       title: 'Emergency Request Logged',
       desc: 'Requirements validated against registered NCR trauma protocols.',
-      status: progress >= 5 ? 'COMPLETE' : progress >= 0 ? 'ACTIVE' : 'PENDING',
-      atProgress: 5,
+      status: progress >= 5 ? 'COMPLETE' : 'ACTIVE',
     },
     {
       id: 'safety',
       title: 'Deterministic Safety Gate Cleared',
       desc: '6/6 mathematical checks passed: ABO/Rh matrix and reserve floor protected.',
       status: progress >= 20 ? 'COMPLETE' : progress >= 5 ? 'ACTIVE' : 'PENDING',
-      atProgress: 20,
     },
     {
       id: 'sourced',
       title: 'Cold-Chain Units Sourced',
       desc: `Units secured at ${request.source_facility || 'Rotary Central Blood Bank'}.`,
       status: progress >= 40 ? 'COMPLETE' : progress >= 20 ? 'ACTIVE' : 'PENDING',
-      atProgress: 40,
     },
     {
       id: 'enroute',
-      title: isFulfilled ? 'Delivered to Trauma OT' : 'En Route to Receiving Hospital',
+      title: isFulfilled ? 'Arrived at receiving hospital' : 'En route to receiving hospital',
       desc: isFulfilled
         ? `Handed over at ${request.hospital_name}.`
-        : `${mode} leg active · live ETA updating every second.`,
+        : `${mode} leg active · ETA updates every second.`,
       status: isFulfilled ? 'COMPLETE' : progress >= 40 ? 'ACTIVE' : 'PENDING',
-      atProgress: 70,
     },
     {
       id: 'delivered',
-      title: 'Handover Confirmed',
+      title: 'Handover confirmed',
       desc: 'Receiving facility acknowledged units. Chain-of-custody closed.',
       status: isFulfilled ? 'COMPLETE' : 'PENDING',
-      atProgress: 100,
     },
   ];
 
-  const pulseLeft = 8 + progress * 0.75; // path animation 8% → 83%
-
   return (
     <div className="flex flex-col gap-5 max-w-4xl mx-auto">
-      {/* Live header */}
       <div className="bg-white rounded-3xl border border-shell-border shadow-card p-5 md:p-6">
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
           <div>
@@ -183,12 +196,11 @@ export const PatientTrackingView: React.FC<PatientTrackingViewProps> = ({
             </p>
             <p className="text-[11px] text-ink-secondary mt-0.5 flex items-center justify-end gap-1">
               <Clock className="w-3 h-3" />
-              {isFulfilled ? 'Arrived' : `ETA ~${Math.max(1, Math.ceil(etaLeft / 6))} min`}
+              {isFulfilled ? 'Arrived' : `ETA ~${Math.max(1, Math.ceil(etaLeft / 5))} min`}
             </p>
           </div>
         </div>
 
-        {/* Progress bar */}
         <div className="mt-5">
           <div className="flex items-center justify-between text-[10px] font-bold text-ink-secondary mb-1.5">
             <span>Dispatch progress</span>
@@ -196,68 +208,128 @@ export const PatientTrackingView: React.FC<PatientTrackingViewProps> = ({
           </div>
           <div className="h-2.5 rounded-full bg-shell-bg border border-shell-border overflow-hidden">
             <div
-              className={`h-full rounded-full transition-all duration-1000 ${isFulfilled ? 'bg-emerald-500' : 'bg-teal-brand'}`}
+              className={`h-full rounded-full transition-all duration-1000 ease-linear ${isFulfilled ? 'bg-emerald-500' : 'bg-teal-brand'}`}
               style={{ width: `${progress}%` }}
             />
           </div>
         </div>
       </div>
 
-      {/* Map-style path card */}
-      <div className="bg-white rounded-3xl border border-shell-border shadow-card p-5 overflow-hidden">
-        <div className="flex items-center gap-2 mb-4">
-          {mode.includes('DRONE') ? <Plane className="w-4 h-4 text-teal-brand" /> : <Truck className="w-4 h-4 text-teal-brand" />}
-          <h2 className="text-sm font-bold text-ink-primary">Live route · {mode}</h2>
+      {/* Live route — single clean layer, no overlaps */}
+      <div className="bg-white rounded-3xl border border-shell-border shadow-card p-5 md:p-6">
+        <div className="flex items-center justify-between gap-2 mb-4">
+          <div className="flex items-center gap-2">
+            {isDrone ? <Plane className="w-4 h-4 text-teal-brand" /> : <Truck className="w-4 h-4 text-teal-brand" />}
+            <h2 className="text-sm font-bold text-ink-primary">Live route · {mode}</h2>
+          </div>
+          <p className="text-[10px] text-ink-secondary">Tap hospital to open map &amp; navigate</p>
         </div>
-        <div className="relative h-36 rounded-2xl bg-gradient-to-br from-shell-bg to-pastel-mint-bg/40 border border-shell-border">
-          {/* Source */}
-          <div className="absolute left-4 bottom-4 flex items-center gap-2">
-            <div className="w-9 h-9 rounded-xl bg-white border border-shell-border flex items-center justify-center shadow-sm">
-              <Package className="w-4 h-4 text-teal-brand" />
-            </div>
-            <div>
-              <p className="text-[10px] font-bold text-ink-primary">Source</p>
-              <p className="text-[10px] text-ink-secondary max-w-[120px] truncate">{request.source_facility || 'Blood Bank'}</p>
-            </div>
-          </div>
-          {/* Dest */}
-          <div className="absolute right-4 top-4 flex items-center gap-2">
-            <div>
-              <p className="text-[10px] font-bold text-ink-primary text-right">Receiving</p>
-              <p className="text-[10px] text-ink-secondary max-w-[140px] truncate text-right">{request.hospital_name}</p>
-            </div>
-            <div className="w-9 h-9 rounded-xl bg-white border border-shell-border flex items-center justify-center shadow-sm">
-              <Building2 className="w-4 h-4 text-teal-brand" />
-            </div>
-          </div>
-          {/* Path line */}
-          <svg className="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="none">
+
+        <div className="relative w-full rounded-2xl border border-shell-border bg-gradient-to-b from-[#f3faf8] to-[#eef6f3] overflow-hidden">
+          {/* Fixed aspect canvas */}
+          <svg viewBox="0 0 1000 280" className="w-full h-auto block" role="img" aria-label="Delivery route map">
+            {/* soft grid */}
+            <defs>
+              <linearGradient id="routeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#0f766e" stopOpacity="0.25" />
+                <stop offset="100%" stopColor="#0f766e" stopOpacity="1" />
+              </linearGradient>
+            </defs>
+            {[80, 140, 200].map((y) => (
+              <line key={y} x1="40" y1={y} x2="960" y2={y} stroke="#d7e5e1" strokeWidth="1" strokeDasharray="4 8" />
+            ))}
+
+            {/* full path (track) */}
+            <path d={pathD} fill="none" stroke="#c5d9d4" strokeWidth="6" strokeLinecap="round" />
+            {/* progress path */}
             <path
-              d="M 48 120 C 160 120, 280 40, 420 40"
+              d={pathD}
               fill="none"
-              stroke="#cbd5e1"
-              strokeWidth="3"
-              strokeDasharray="6 6"
+              stroke="url(#routeGrad)"
+              strokeWidth="6"
+              strokeLinecap="round"
+              strokeDasharray="1200"
+              strokeDashoffset={1200 - tProg * 1200}
+              style={{ transition: 'stroke-dashoffset 1s linear' }}
             />
-            <path
-              d="M 48 120 C 160 120, 280 40, 420 40"
-              fill="none"
-              stroke="#0f766e"
-              strokeWidth="3"
-              strokeDasharray="600"
-              strokeDashoffset={600 - (progress / 100) * 600}
-              className="transition-all duration-1000"
-            />
+
+            {/* Source node */}
+            <circle cx={p0.x} cy={p0.y} r="18" fill="#fff" stroke="#0f766e" strokeWidth="2.5" />
+            <circle cx={p0.x} cy={p0.y} r="8" fill="#0f766e" />
+
+            {/* Destination node */}
+            <circle cx={p3.x} cy={p3.y} r="18" fill="#fff" stroke="#0f766e" strokeWidth="2.5" />
+            <circle cx={p3.x} cy={p3.y} r="8" fill={isFulfilled ? '#059669' : '#0f766e'} />
+
+            {/* Moving vehicle */}
+            <g
+              style={{ transition: 'transform 1s linear' }}
+              transform={`translate(${marker.x}, ${marker.y})`}
+            >
+              <circle r="22" fill="#0f766e" opacity="0.15" />
+              <circle r="16" fill="#0f766e" />
+              {/* simple plane/truck glyph via text for crispness */}
+              <text
+                textAnchor="middle"
+                dominantBaseline="central"
+                fontSize="14"
+                fill="#fff"
+              >
+                {isDrone ? '✈' : '🚚'}
+              </text>
+            </g>
           </svg>
-          {/* Moving marker */}
-          <div
-            className="absolute w-7 h-7 -ml-3.5 -mt-3.5 rounded-full bg-teal-brand text-white flex items-center justify-center shadow-pill transition-all duration-1000"
-            style={{ left: `${pulseLeft}%`, top: `${70 - progress * 0.35}%` }}
-          >
-            {mode.includes('DRONE') ? <Plane className="w-3.5 h-3.5" /> : <Truck className="w-3.5 h-3.5" />}
+
+          {/* Labels outside the path — HTML overlay with absolute positions matching SVG ends */}
+          <div className="pointer-events-none absolute inset-0">
+            <div className="absolute left-3 bottom-3 sm:left-4 sm:bottom-4 pointer-events-auto max-w-[42%]">
+              <a
+                href={sourceMapsUrl(request.source_facility || 'Blood Bank')}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-start gap-2 rounded-2xl bg-white/95 border border-shell-border shadow-sm px-2.5 py-2 hover:border-teal-brand transition-colors"
+              >
+                <span className="w-8 h-8 rounded-xl bg-teal-brand/10 text-teal-brand flex items-center justify-center shrink-0">
+                  <Package className="w-4 h-4" />
+                </span>
+                <span className="min-w-0">
+                  <span className="block text-[10px] font-bold text-ink-primary">Source</span>
+                  <span className="block text-[10px] text-ink-secondary leading-snug line-clamp-2">
+                    {request.source_facility || 'Blood Bank'}
+                  </span>
+                  <span className="mt-0.5 inline-flex items-center gap-0.5 text-[9px] font-semibold text-teal-brand">
+                    <MapPin className="w-2.5 h-2.5" /> Map
+                  </span>
+                </span>
+              </a>
+            </div>
+
+            <div className="absolute right-3 top-3 sm:right-4 sm:top-4 pointer-events-auto max-w-[48%]">
+              <a
+                href={hospitalMapsUrl(request.hospital_name)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-start gap-2 rounded-2xl bg-white/95 border border-shell-border shadow-sm px-2.5 py-2 hover:border-teal-brand transition-colors text-right flex-row-reverse"
+                title="Open hospital location on Google Maps"
+              >
+                <span className="w-8 h-8 rounded-xl bg-teal-brand/10 text-teal-brand flex items-center justify-center shrink-0">
+                  <Building2 className="w-4 h-4" />
+                </span>
+                <span className="min-w-0">
+                  <span className="block text-[10px] font-bold text-ink-primary">Receiving hospital</span>
+                  <span className="block text-[10px] text-ink-secondary leading-snug line-clamp-2">
+                    {request.hospital_name}
+                  </span>
+                  <span className="mt-0.5 inline-flex items-center gap-0.5 text-[9px] font-semibold text-teal-brand justify-end">
+                    Open location <ExternalLink className="w-2.5 h-2.5" />
+                  </span>
+                </span>
+              </a>
+            </div>
           </div>
         </div>
-        <div className="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-2">
+
+        <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-2">
           {[
             { icon: Thermometer, label: 'Cold chain', value: isFulfilled ? 'Stable' : '2–6°C OK' },
             { icon: MapPin, label: 'Corridor', value: 'NCR priority' },
@@ -274,7 +346,6 @@ export const PatientTrackingView: React.FC<PatientTrackingViewProps> = ({
         </div>
       </div>
 
-      {/* Milestones */}
       <div className="bg-white rounded-3xl border border-shell-border shadow-card p-5">
         <h2 className="text-sm font-bold text-ink-primary mb-4">Delivery milestones</h2>
         <ol className="space-y-4">
@@ -315,6 +386,14 @@ export const PatientTrackingView: React.FC<PatientTrackingViewProps> = ({
           className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold bg-pastel-rose-bg text-crimson border border-pastel-rose-border"
         >
           <PhoneCall className="w-3.5 h-3.5" /> Emergency 112
+        </a>
+        <a
+          href={hospitalMapsUrl(request.hospital_name)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold border border-teal-brand/30 text-teal-brand hover:bg-teal-brand/5"
+        >
+          <Building2 className="w-3.5 h-3.5" /> Hospital location
         </a>
         <button
           onClick={onGoToRequests}

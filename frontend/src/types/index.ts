@@ -35,8 +35,7 @@ export type NavItem =
   | 'safety-audit'
   | 'simulation-studio'
   | 'facility-registry'
-  | 'donors-standby'
-  | 'appointments';
+  | 'donors-standby';
 
 export interface BloodRequestCreate {
   hospital_id: string;
@@ -115,49 +114,4 @@ export interface SafetyCheckResult {
   logistics_validity: boolean;
   mathematical_consistency: boolean;
 }
-
-
-export type AppointmentStatus = 'BOOKED' | 'CONFIRMED' | 'COMPLETED' | 'CANCELLED';
-export type AppointmentPurpose =
-  | 'blood_sample' | 'medication' | 'consultation' | 'follow_up' | 'diagnostics' | 'other';
-export type AppointmentCriticality = 'ROUTINE' | 'PRIORITY' | 'CRITICAL';
-export type AgeGroup = '0-12' | '13-17' | '18-40' | '41-60' | '60+';
-
-export interface AppointmentPrescription {
-  medicines: Array<{ name: string; dosage: string; duration: string }>;
-  advice: string;
-  issued_at: string;
-  doctor_name: string;
-}
-
-export interface PatientAppointment {
-  id: string;
-  patient_name: string;
-  patient_email: string;
-  patient_age_group: AgeGroup;
-  patient_photo?: string; // data URL
-  hospital_id: string;
-  hospital_name: string;
-  hospital_city: string;
-  hospital_map_url: string;
-  doctor_id: string;
-  doctor_name: string;
-  doctor_specialty: string;
-  purpose: AppointmentPurpose;
-  purpose_label: string;
-  problem_description: string;
-  date: string;
-  time: string;
-  status: AppointmentStatus;
-  criticality: AppointmentCriticality;
-  is_emergency_slot: boolean;
-  agent_note: string;
-  created_at: string;
-  /** Demo billing */
-  total_bill_inr: number;
-  prescription?: AppointmentPrescription;
-  /** Doctor-allotted follow-up */
-  reappointment_date?: string;
-  reappointment_time?: string;
-  reappointment_note?: string;
-}
+export * from './appointments';

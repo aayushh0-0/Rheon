@@ -28,11 +28,11 @@ export type PatientTab =
   | 'history'
   | 'pdf'
   | 'request'
+  | 'appointment'
   | 'requests'
   | 'tracking'
   | 'donors'
-  | 'guidance'
-  | 'appointment';
+  | 'guidance';
 
 interface PatientShellProps {
   activeTab: PatientTab;
@@ -55,10 +55,11 @@ export const PatientShell: React.FC<PatientShellProps> = ({
     { id: 'upload', label: 'Upload Report & OCR', icon: Upload, section: 'HEALTH INTELLIGENCE' },
     { id: 'analysis', label: 'Report Analysis', icon: Activity, section: 'HEALTH INTELLIGENCE' },
     { id: 'trends', label: 'Longitudinal Trends', icon: TrendingUp, section: 'HEALTH INTELLIGENCE' },
-    { id: 'history', label: 'Medical History', icon: Calendar, section: 'HEALTH INTELLIGENCE' },
+    { id: 'history', label: 'Medical History', icon: Calendar,
+  CalendarPlus, section: 'HEALTH INTELLIGENCE' },
     { id: 'pdf', label: 'Download Health PDF', icon: Download, section: 'HEALTH INTELLIGENCE' },
     { id: 'request', label: 'Request Blood', icon: PlusCircle, badge: 'New', section: 'EMERGENCY COORDINATION' },
-    { id: 'appointment', label: 'New Appointment', icon: CalendarPlus, badge: 'AI', section: 'EMERGENCY COORDINATION' },
+    { id: 'appointment', label: 'My Appointments', icon: CalendarPlus, badge: 'AI', section: 'EMERGENCY COORDINATION' },
     { id: 'requests', label: 'My Requests', icon: Clock, badge: patientRequests.length > 0 ? `${patientRequests.length}` : undefined, section: 'EMERGENCY COORDINATION' },
     { id: 'tracking', label: 'Request Tracking', icon: Navigation, section: 'EMERGENCY COORDINATION' },
     { id: 'donors', label: 'Donors & Matching', icon: Users, section: 'EMERGENCY COORDINATION' },
@@ -252,14 +253,14 @@ export const PatientShell: React.FC<PatientShellProps> = ({
 
               <button
                 onClick={() => onSelectTab('appointment')}
-                className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-shell-card-subtle text-teal-brand border border-teal-brand/30 rounded-full text-xs md:text-sm font-semibold shadow-sm transition-all"
+                className="hidden sm:flex items-center gap-2 px-4 py-2 bg-white hover:bg-shell-bg border border-shell-border text-ink-primary rounded-full text-xs md:text-sm font-semibold transition-all"
               >
-                <CalendarPlus className="w-4 h-4" />
-                <span>New Appointment</span>
+                <CalendarPlus className="w-4 h-4 text-teal-brand" />
+                <span>My Appointments</span>
               </button>
               <button
                 onClick={() => onSelectTab('request')}
-                className="flex items-center gap-2 px-4 py-2 bg-teal-brand hover:bg-teal-brand-hover text-white rounded-full text-xs md:text-sm font-semibold shadow-pill transition-all"
+                className="flex items-center gap-2 px-4 py-2 bg-teal-brand hover:bg-teal-brand-hover text-white rounded-full text-xs md:text-sm font-semibold shadow-pill transition-all transform hover:scale-[1.02] active:scale-[0.98]"
               >
                 <PlusCircle className="w-4 h-4" />
                 <span>Request Blood</span>

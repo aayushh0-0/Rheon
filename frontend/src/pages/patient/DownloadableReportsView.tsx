@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Download, FileText, ShieldCheck, ArrowLeft, ExternalLink } from 'lucide-react';
+import { Download, FileText, ShieldCheck, ArrowLeft, ExternalLink, Trash2 } from 'lucide-react';
 import { medicalApi, MedicalReport } from '../../services/medicalApi';
 
 interface DownloadableReportsViewProps {
@@ -18,6 +18,19 @@ export const DownloadableReportsView: React.FC<DownloadableReportsViewProps> = (
   }, []);
 
   const currentReport = reports.find(r => r.id === selectedReportId) || reports[0];
+
+  const handleDeleteReport = async (reportId: string) => {
+    if (!window.confirm('Delete this report from medical history?')) return;
+    try {
+      await medicalApi.deleteReport(reportId);
+      const refreshed = await medicalApi.listReports('patient-priya-01');
+      setReports(refreshed);
+      setSelectedReportId(refreshed[0]?.id || '');
+    } catch (err) {
+      console.error(err);
+      window.alert('Could not delete report.');
+    }
+  };
 
   const handleDownloadPDF = () => {
     const element = document.createElement('a');
@@ -94,6 +107,14 @@ export const DownloadableReportsView: React.FC<DownloadableReportsViewProps> = (
                 Ready for clinical sharing, hospital admission, or personal records.
               </p>
             </div>
+            <button
+              type="button"
+              onClick={() => currentReport && handleDeleteReport(currentReport.id)}
+              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-red-200 text-red-600 bg-red-50 hover:bg-red-100 text-xs font-bold transition-colors"
+            >
+              <Trash2 className="w-4 h-4" />
+              Delete report from history
+            </button>
             <button
               onClick={handleDownloadPDF}
               className="flex items-center gap-2 px-5 py-2.5 bg-teal-brand hover:bg-teal-brand-hover text-white rounded-xl text-xs font-bold shadow-pill transition-all"

@@ -1,4 +1,10 @@
 import { apiClient } from './apiClient';
+import {
+  parseLabReportText,
+  summarizeStatuses,
+  buildGroundedExplanations,
+  ParsedLabMeasurement,
+} from '../utils/labReportParser';
 
 export interface MedicalMeasurement {
   id: string;
@@ -24,6 +30,8 @@ export interface MedicalReport {
   extracted_data?: string;
   created_at: string;
   measurements: MedicalMeasurement[];
+  explanations?: Array<{ title: string; body: string; tone: 'ok' | 'warn' | 'bad' }>;
+  status_counts?: { NORMAL: number; LOW: number; HIGH: number; CRITICAL: number; UNKNOWN: number };
 }
 
 export interface ReportUploadPayload {
@@ -33,14 +41,123 @@ export interface ReportUploadPayload {
   content_text?: string;
 }
 
+const LOCAL_STORAGE_KEY = 'rheon_ai_medical_reports_v1';
+
+export const getLocalReports = (): MedicalReport[] => {
+  try {
+    const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length) return parsed;
+    }
+  } catch { /* ignore */ }
+  return [];
+};
+
+const saveLocalReport = (report: MedicalReport) => {
+  try {
+    const reports = getLocalReports().filter((r) => r.id !== report.id);
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify([report, ...reports]));
+  } catch { /* ignore */ }
+};
+
+function deleteLocalReport(reportId: string) {
+  try {
+    const reports = getLocalReports().filter((r) => r.id !== reportId);
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(reports));
+  } catch { /* ignore */ }
+}
+
+function measurementsFromParsed(reportId: string, parsed: ParsedLabMeasurement[]): MedicalMeasurement[] {
+  const now = new Date().toISOString();
+  return parsed.map((p, i) => ({
+    id: `m-${reportId}-${i}`,
+    report_id: reportId,
+    parameter_name: p.parameter_name,
+    value: p.value,
+    unit: p.unit,
+    reference_range: p.reference_range,
+    status: p.status,
+    is_verified: true,
+    notes: p.notes,
+    created_at: now,
+  }));
+}
+
+export function buildReportFromText(payload: ReportUploadPayload, text: string): MedicalReport {
+  const reportId = `rep-${Date.now()}`;
+  const parsed = parseLabReportText(text);
+  const counts = summarizeStatuses(parsed);
+  const explanations = buildGroundedExplanations(parsed);
+  const measurements = measurementsFromParsed(reportId, parsed);
+  const abnormal = counts.LOW + counts.HIGH + counts.CRITICAL;
+  const summary =
+    parsed.length === 0
+      ? `Could not detect structured lab parameters in '${payload.filename}'.`
+      : `Extracted ${parsed.length} parameter(s) from '${payload.filename}'. ${counts.NORMAL} normal, ${counts.LOW} low, ${counts.HIGH} high, ${counts.CRITICAL} critical` +
+        (abnormal ? ` — ${abnormal} outside reference intervals.` : '.');
+
+  return {
+    id: reportId,
+    patient_id: payload.patient_id,
+    filename: payload.filename,
+    report_type: payload.report_type || 'BLOOD_WORK',
+    status: parsed.length ? 'EXTRACTED' : 'NEEDS_REVIEW',
+    summary,
+    extracted_data: text.slice(0, 4000),
+    created_at: new Date().toISOString(),
+    measurements,
+    explanations,
+    status_counts: counts,
+  };
+}
+
+function simulateLocalUpload(payload: ReportUploadPayload): MedicalReport {
+  const report = buildReportFromText(payload, payload.content_text || '');
+  saveLocalReport(report);
+  return report;
+}
+
+const updateLocalMeasurement = (
+  measId: string,
+  updates: Partial<MedicalMeasurement>
+): MedicalMeasurement => {
+  const reports = getLocalReports();
+  let updated: MedicalMeasurement | null = null;
+  const next = reports.map((r) => {
+    const measurements = r.measurements.map((m) => {
+      if (m.id !== measId) return m;
+      updated = { ...m, ...updates };
+      return updated!;
+    });
+    if (updated && measurements.some((m) => m.id === measId)) {
+      const asParsed: ParsedLabMeasurement[] = measurements.map((m) => ({
+        parameter_name: m.parameter_name,
+        value: m.value,
+        unit: m.unit || '',
+        reference_range: m.reference_range || '',
+        status: (m.status as ParsedLabMeasurement['status']) || 'UNKNOWN',
+      }));
+      return {
+        ...r,
+        measurements,
+        explanations: buildGroundedExplanations(asParsed),
+        status_counts: summarizeStatuses(asParsed),
+      };
+    }
+    return { ...r, measurements };
+  });
+  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(next));
+  if (!updated) throw new Error('Measurement not found');
+  return updated;
+};
+
 export const medicalApi = {
   listReports: async (patientId?: string): Promise<MedicalReport[]> => {
     try {
       const url = patientId ? `/medical/reports?patient_id=${patientId}` : '/medical/reports';
-      const res = await apiClient.get<MedicalReport[]>(url);
-      return res;
-    } catch (err) {
-      console.warn('API listReports failed, returning local fallback storage', err);
+      return await apiClient.get<MedicalReport[]>(url);
+    } catch {
       return getLocalReports();
     }
   },
@@ -48,112 +165,40 @@ export const medicalApi = {
   uploadReport: async (payload: ReportUploadPayload): Promise<MedicalReport> => {
     try {
       const res = await apiClient.post<MedicalReport>('/medical/reports/upload', payload);
-      const report = res;
-      saveLocalReport(report);
-      return report;
-    } catch (err) {
-      console.warn('API uploadReport failed, using local extraction fallback', err);
+      saveLocalReport(res);
+      return res;
+    } catch {
       return simulateLocalUpload(payload);
     }
   },
 
   getReport: async (reportId: string): Promise<MedicalReport> => {
     try {
-      const res = await apiClient.get<MedicalReport>(`/medical/reports/${reportId}`);
-      return res;
-    } catch (err) {
-      const local = getLocalReports().find(r => r.id === reportId);
+      return await apiClient.get<MedicalReport>(`/medical/reports/${reportId}`);
+    } catch {
+      const local = getLocalReports().find((r) => r.id === reportId);
       if (local) return local;
-      throw err;
+      throw new Error('Report not found');
     }
   },
 
-  updateMeasurement: async (measId: string, updates: Partial<MedicalMeasurement>): Promise<MedicalMeasurement> => {
+  updateMeasurement: async (
+    measId: string,
+    updates: Partial<MedicalMeasurement>
+  ): Promise<MedicalMeasurement> => {
     try {
-      const res = await apiClient.post<MedicalMeasurement>(`/medical/measurements/${measId}`, updates);
-      return res;
-    } catch (err) {
-      console.warn('API updateMeasurement failed, updating local storage', err);
+      return await apiClient.post<MedicalMeasurement>(`/medical/measurements/${measId}`, updates);
+    } catch {
       return updateLocalMeasurement(measId, updates);
     }
   },
-};
 
-// LocalStorage helpers for robust offline/fallback resilience
-const LOCAL_STORAGE_KEY = 'rheon_ai_medical_reports_v1';
-
-export const getLocalReports = (): MedicalReport[] => {
-  try {
-    const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (raw) return JSON.parse(raw);
-  } catch (e) {
-    // ignore
-  }
-  // Default demo report
-  const defaultReport: MedicalReport = {
-    id: 'rep-demo-001',
-    patient_id: 'patient-priya-01',
-    filename: 'Delhi_NCR_Comprehensive_Metabolic_Panel.pdf',
-    report_type: 'BLOOD_WORK',
-    status: 'EXTRACTED',
-    summary: 'Comprehensive metabolic panel and complete blood count extracted successfully. Hemoglobin within normal range.',
-    created_at: new Date(Date.now() - 86400000 * 2).toISOString(),
-    measurements: [
-      { id: 'meas-1', report_id: 'rep-demo-001', parameter_name: 'Hemoglobin', value: '14.2', unit: 'g/dL', reference_range: '13.5 - 17.5', status: 'NORMAL', is_verified: true, notes: 'Optimal oxygen carrying capacity.', created_at: new Date().toISOString() },
-      { id: 'meas-2', report_id: 'rep-demo-001', parameter_name: 'Fasting Glucose', value: '98', unit: 'mg/dL', reference_range: '70 - 99', status: 'NORMAL', is_verified: true, notes: 'Normal fasting blood sugar.', created_at: new Date().toISOString() },
-      { id: 'meas-3', report_id: 'rep-demo-001', parameter_name: 'HbA1c', value: '5.4', unit: '%', reference_range: '< 5.7', status: 'NORMAL', is_verified: true, notes: 'Normal 3-month average glucose.', created_at: new Date().toISOString() },
-      { id: 'meas-4', report_id: 'rep-demo-001', parameter_name: 'Total Cholesterol', value: '185', unit: 'mg/dL', reference_range: '< 200', status: 'NORMAL', is_verified: true, notes: 'Desirable lipid profile.', created_at: new Date().toISOString() },
-      { id: 'meas-5', report_id: 'rep-demo-001', parameter_name: 'Platelet Count', value: '250', unit: 'K/uL', reference_range: '150 - 450', status: 'NORMAL', is_verified: true, notes: 'Normal clotting function.', created_at: new Date().toISOString() },
-      { id: 'meas-6', report_id: 'rep-demo-001', parameter_name: 'White Blood Cells (WBC)', value: '7.4', unit: 'K/uL', reference_range: '4.5 - 11.0', status: 'NORMAL', is_verified: true, notes: 'No signs of acute infection.', created_at: new Date().toISOString() },
-    ]
-  };
-  saveLocalReport(defaultReport);
-  return [defaultReport];
-};
-
-const saveLocalReport = (report: MedicalReport) => {
-  try {
-    const reports = getLocalReports().filter(r => r.id !== report.id);
-    reports.unshift(report);
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(reports));
-  } catch (e) {
-    // ignore
-  }
-};
-
-const updateLocalMeasurement = (measId: string, updates: Partial<MedicalMeasurement>): MedicalMeasurement => {
-  const reports = getLocalReports();
-  let updatedMeas: MedicalMeasurement = {} as any;
-  for (const r of reports) {
-    for (const m of r.measurements) {
-      if (m.id === measId) {
-        Object.assign(m, updates);
-        updatedMeas = m;
-      }
+  deleteReport: async (reportId: string): Promise<void> => {
+    try {
+      await apiClient.post(`/medical/reports/${reportId}/delete`, {});
+    } catch {
+      /* offline */
     }
-  }
-  try {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(reports));
-  } catch (e) {}
-  return updatedMeas;
-};
-
-const simulateLocalUpload = (payload: ReportUploadPayload): MedicalReport => {
-  const newReport: MedicalReport = {
-    id: `rep-${Date.now()}`,
-    patient_id: payload.patient_id || 'patient-priya-01',
-    filename: payload.filename,
-    report_type: payload.report_type || 'BLOOD_WORK',
-    status: 'EXTRACTED',
-    summary: `Successfully parsed '${payload.filename}' using RHEON OCR & AI extraction engine. All parameters structured and verified.`,
-    created_at: new Date().toISOString(),
-    measurements: [
-      { id: `m-${Date.now()}-1`, report_id: `rep-${Date.now()}`, parameter_name: 'Hemoglobin', value: '13.6', unit: 'g/dL', reference_range: '13.5 - 17.5', status: 'NORMAL', is_verified: true, notes: 'Extracted from uploaded report.', created_at: new Date().toISOString() },
-      { id: `m-${Date.now()}-2`, report_id: `rep-${Date.now()}`, parameter_name: 'White Blood Cells (WBC)', value: '8.1', unit: 'K/uL', reference_range: '4.5 - 11.0', status: 'NORMAL', is_verified: true, notes: 'Normal range.', created_at: new Date().toISOString() },
-      { id: `m-${Date.now()}-3`, report_id: `rep-${Date.now()}`, parameter_name: 'Platelet Count', value: '235', unit: 'K/uL', reference_range: '150 - 450', status: 'NORMAL', is_verified: true, notes: 'Normal count.', created_at: new Date().toISOString() },
-      { id: `m-${Date.now()}-4`, report_id: `rep-${Date.now()}`, parameter_name: 'Faisal Glucose', value: '94', unit: 'mg/dL', reference_range: '70 - 99', status: 'NORMAL', is_verified: true, notes: 'Normal fasting level.', created_at: new Date().toISOString() },
-    ]
-  };
-  saveLocalReport(newReport);
-  return newReport;
+    deleteLocalReport(reportId);
+  },
 };
