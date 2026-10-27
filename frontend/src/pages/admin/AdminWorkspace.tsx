@@ -24,6 +24,7 @@ import {
 } from '../../types';
 import { useAuth } from '../../context/AuthContext';
 import { useRouter } from '../../context/RouterContext';
+import { AdminAppointmentsView } from './AdminAppointmentsView';
 
 export const AdminWorkspace: React.FC = () => {
   const { logout, switchRole } = useAuth();
@@ -40,6 +41,7 @@ export const AdminWorkspace: React.FC = () => {
     if (path.includes('/admin/matcher')) return 'candidate-matcher';
     if (path.includes('/admin/simulation')) return 'simulation-studio';
     if (path.includes('/admin/donors')) return 'donors-standby';
+    if (path.includes('/admin/appointments')) return 'appointments';
     return 'command-center';
   };
 
@@ -93,6 +95,9 @@ export const AdminWorkspace: React.FC = () => {
         break;
       case 'donors-standby':
         navigate('/admin/donors');
+        break;
+      case 'appointments':
+        navigate('/admin/appointments');
         break;
     }
   };
@@ -203,6 +208,7 @@ export const AdminWorkspace: React.FC = () => {
         {(activeTab === 'route-dispatch' || activeTab === 'drone-telemetry') && <LogisticsView />}
         {activeTab === 'safety-audit' && <SafetyAuditView />}
         {activeTab === 'facility-registry' && <FacilityRegistryView />}
+        {activeTab === 'appointments' && <AdminAppointmentsView />}
 
         {/* Intelligence / Simulation / Standby View Placeholders */}
         {['candidate-matcher', 'simulation-studio', 'donors-standby'].includes(activeTab) && (

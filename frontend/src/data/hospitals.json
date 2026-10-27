@@ -1,0 +1,2458 @@
+[
+  {
+    "id": "gn-yatharth",
+    "name": "Yatharth Super Speciality Hospital",
+    "city": "Greater Noida",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Yatharth+Super+Speciality+Hospital+Greater+Noida",
+    "specialties": [
+      "Cardiology",
+      "Neurology",
+      "Orthopaedics",
+      "Critical Care",
+      "Multispeciality"
+    ],
+    "famousFor": "Multispeciality care, cardiology, neurology, orthopaedics, critical care.",
+    "addressShort": "Greater Noida, UP",
+    "distanceKm": 38,
+    "type": "multispeciality",
+    "doctors": [
+      {
+        "id": "gn-yatharth-doc-1",
+        "name": "Dr. Ananya Mehta",
+        "specialty": "Cardiology",
+        "experienceYears": 14,
+        "rating": 4.8,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      },
+      {
+        "id": "gn-yatharth-doc-2",
+        "name": "Dr. Rohan Kapoor",
+        "specialty": "Neurology",
+        "experienceYears": 11,
+        "rating": 4.7,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      },
+      {
+        "id": "gn-yatharth-doc-3",
+        "name": "Dr. Sneha Verma",
+        "specialty": "Orthopaedics",
+        "experienceYears": 9,
+        "rating": 4.6,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.474,
+    "lng": 77.5045
+  },
+  {
+    "id": "gn-kailash",
+    "name": "Kailash Hospital & Heart Institute",
+    "city": "Greater Noida",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Kailash+Hospital+Greater+Noida",
+    "specialties": [
+      "Cardiology",
+      "General Medicine",
+      "Surgery",
+      "Orthopaedics"
+    ],
+    "famousFor": "Heart care, general medicine, surgery, orthopaedics.",
+    "addressShort": "Greater Noida, UP",
+    "distanceKm": 36,
+    "type": "specialty",
+    "doctors": [
+      {
+        "id": "gn-kailash-doc-1",
+        "name": "Dr. Vivek Sharma",
+        "specialty": "Cardiology",
+        "experienceYears": 18,
+        "rating": 4.9,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      },
+      {
+        "id": "gn-kailash-doc-2",
+        "name": "Dr. Priya Nair",
+        "specialty": "General Medicine",
+        "experienceYears": 12,
+        "rating": 4.5,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.468,
+    "lng": 77.51
+  },
+  {
+    "id": "gn-fortis",
+    "name": "Fortis Hospital Greater Noida",
+    "city": "Greater Noida",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Fortis+Hospital+Greater+Noida",
+    "specialties": [
+      "Cardiac Care",
+      "Orthopaedics",
+      "Emergency",
+      "Multispeciality"
+    ],
+    "famousFor": "Multispeciality care, cardiac care, orthopaedics, emergency services.",
+    "addressShort": "Greater Noida, UP",
+    "distanceKm": 35,
+    "type": "multispeciality",
+    "doctors": [
+      {
+        "id": "gn-fortis-doc-1",
+        "name": "Dr. Amit Bansal",
+        "specialty": "Cardiac Care",
+        "experienceYears": 16,
+        "rating": 4.8,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      },
+      {
+        "id": "gn-fortis-doc-2",
+        "name": "Dr. Neha Gupta",
+        "specialty": "Orthopaedics",
+        "experienceYears": 10,
+        "rating": 4.6,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.47,
+    "lng": 77.502
+  },
+  {
+    "id": "gn-sharda",
+    "name": "Sharda Hospital",
+    "city": "Greater Noida",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Sharda+Hospital+Greater+Noida",
+    "specialties": [
+      "General Medicine",
+      "Surgery",
+      "Obstetrics",
+      "Gynaecology",
+      "Paediatrics",
+      "Emergency"
+    ],
+    "famousFor": "General medicine, surgery, obstetrics and gynaecology, paediatrics, emergency care.",
+    "addressShort": "Greater Noida, UP",
+    "distanceKm": 34,
+    "type": "multispeciality",
+    "doctors": [
+      {
+        "id": "gn-sharda-doc-1",
+        "name": "Dr. Kavita Singh",
+        "specialty": "Obstetrics & Gynaecology",
+        "experienceYears": 13,
+        "rating": 4.7,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      },
+      {
+        "id": "gn-sharda-doc-2",
+        "name": "Dr. Manish Rao",
+        "specialty": "Paediatrics",
+        "experienceYears": 8,
+        "rating": 4.5,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.4735,
+    "lng": 77.485
+  },
+  {
+    "id": "gn-gims",
+    "name": "Government Institute of Medical Sciences (GIMS)",
+    "city": "Greater Noida",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=GIMS+Greater+Noida",
+    "specialties": [
+      "General Medicine",
+      "Surgery",
+      "Emergency",
+      "Trauma"
+    ],
+    "famousFor": "Government tertiary care, general medicine, surgery, emergency and trauma services.",
+    "addressShort": "Greater Noida, UP",
+    "distanceKm": 32,
+    "type": "government",
+    "doctors": [
+      {
+        "id": "gn-gims-doc-1",
+        "name": "Dr. Suresh Yadav",
+        "specialty": "Emergency & Trauma",
+        "experienceYears": 15,
+        "rating": 4.4,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      },
+      {
+        "id": "gn-gims-doc-2",
+        "name": "Dr. Fatima Khan",
+        "specialty": "General Medicine",
+        "experienceYears": 10,
+        "rating": 4.3,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.46,
+    "lng": 77.5
+  },
+  {
+    "id": "gn-nimt",
+    "name": "NIMT Hospital",
+    "city": "Greater Noida",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=NIMT+Hospital+Greater+Noida",
+    "specialties": [
+      "General Healthcare",
+      "Multispeciality"
+    ],
+    "famousFor": "General healthcare and multispeciality services.",
+    "addressShort": "Greater Noida, UP",
+    "distanceKm": 37,
+    "type": "multispeciality",
+    "doctors": [
+      {
+        "id": "gn-nimt-doc-1",
+        "name": "Dr. Arjun Malhotra",
+        "specialty": "General Medicine",
+        "experienceYears": 7,
+        "rating": 4.2,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.5079,
+    "lng": 77.4705
+  },
+  {
+    "id": "gn-navin",
+    "name": "Navin Hospital",
+    "city": "Greater Noida",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Navin+Hospital+Greater+Noida",
+    "specialties": [
+      "General Medicine",
+      "Surgery"
+    ],
+    "famousFor": "General medical and surgical care.",
+    "addressShort": "Greater Noida, UP",
+    "distanceKm": 39,
+    "type": "multispeciality",
+    "doctors": [
+      {
+        "id": "gn-navin-doc-1",
+        "name": "Dr. Ritu Chopra",
+        "specialty": "General Surgery",
+        "experienceYears": 9,
+        "rating": 4.3,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.4914,
+    "lng": 77.487
+  },
+  {
+    "id": "gn-yatharth-wellness",
+    "name": "Yatharth Wellness Hospital & Trauma Centre",
+    "city": "Greater Noida",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Yatharth+Wellness+Hospital+Greater+Noida",
+    "specialties": [
+      "Trauma",
+      "Emergency",
+      "Multispeciality"
+    ],
+    "famousFor": "Trauma care, emergency services and multispeciality treatment.",
+    "addressShort": "Greater Noida, UP",
+    "distanceKm": 33,
+    "type": "trauma",
+    "doctors": [
+      {
+        "id": "gn-yatharth-wellness-doc-1",
+        "name": "Dr. Harsh Vardhan",
+        "specialty": "Trauma Surgery",
+        "experienceYears": 12,
+        "rating": 4.7,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.4754,
+    "lng": 77.503
+  },
+  {
+    "id": "noid-jaypee",
+    "name": "Jaypee Hospital",
+    "city": "Noida",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Jaypee+Hospital+Noida",
+    "specialties": [
+      "Cardiology",
+      "Oncology",
+      "Organ Transplants",
+      "Neurosciences",
+      "Orthopaedics"
+    ],
+    "famousFor": "Cardiology, oncology, organ transplants, neurosciences, orthopaedics.",
+    "addressShort": "Noida, UP",
+    "distanceKm": 22,
+    "type": "multispeciality",
+    "doctors": [
+      {
+        "id": "noid-jaypee-doc-1",
+        "name": "Dr. Sanjay Batra",
+        "specialty": "Cardiology",
+        "experienceYears": 20,
+        "rating": 4.9,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      },
+      {
+        "id": "noid-jaypee-doc-2",
+        "name": "Dr. Meera Iyer",
+        "specialty": "Oncology",
+        "experienceYears": 15,
+        "rating": 4.8,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      },
+      {
+        "id": "noid-jaypee-doc-3",
+        "name": "Dr. Karan Sethi",
+        "specialty": "Neurosciences",
+        "experienceYears": 13,
+        "rating": 4.7,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.535,
+    "lng": 77.37
+  },
+  {
+    "id": "noid-fortis",
+    "name": "Fortis Hospital Noida",
+    "city": "Noida",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Fortis+Hospital+Noida",
+    "specialties": [
+      "Neurosurgery",
+      "Heart Care",
+      "Cancer",
+      "Transplants",
+      "Joint Replacement"
+    ],
+    "famousFor": "Neurosurgery, heart care, cancer treatment, kidney and liver transplants, joint replacement.",
+    "addressShort": "Noida, UP",
+    "distanceKm": 20,
+    "type": "multispeciality",
+    "doctors": [
+      {
+        "id": "noid-fortis-doc-1",
+        "name": "Dr. Alok Tandon",
+        "specialty": "Neurosurgery",
+        "experienceYears": 17,
+        "rating": 4.8,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      },
+      {
+        "id": "noid-fortis-doc-2",
+        "name": "Dr. Shweta Jain",
+        "specialty": "Cardiology",
+        "experienceYears": 14,
+        "rating": 4.7,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.567,
+    "lng": 77.325
+  },
+  {
+    "id": "noid-max",
+    "name": "Max Multi Speciality Centre",
+    "city": "Noida",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Max+Multi+Speciality+Centre+Noida",
+    "specialties": [
+      "Diagnostics",
+      "General Medicine",
+      "Outpatient"
+    ],
+    "famousFor": "Specialist consultations, diagnostics, general medicine and outpatient care.",
+    "addressShort": "Noida, UP",
+    "distanceKm": 18,
+    "type": "specialty",
+    "doctors": [
+      {
+        "id": "noid-max-doc-1",
+        "name": "Dr. Pooja Rana",
+        "specialty": "General Medicine",
+        "experienceYears": 11,
+        "rating": 4.5,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.57,
+    "lng": 77.32
+  },
+  {
+    "id": "noid-metro",
+    "name": "Metro Hospital & Heart Institute",
+    "city": "Noida",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Metro+Hospital+Noida",
+    "specialties": [
+      "Cardiology",
+      "Cardiac Surgery"
+    ],
+    "famousFor": "Cardiology, cardiac surgery and heart-related conditions.",
+    "addressShort": "Noida, UP",
+    "distanceKm": 19,
+    "type": "specialty",
+    "doctors": [
+      {
+        "id": "noid-metro-doc-1",
+        "name": "Dr. Rajesh Khanna",
+        "specialty": "Cardiac Surgery",
+        "experienceYears": 19,
+        "rating": 4.9,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.5355,
+    "lng": 77.391
+  },
+  {
+    "id": "noid-kailash",
+    "name": "Kailash Hospital",
+    "city": "Noida",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Kailash+Hospital+Noida",
+    "specialties": [
+      "Cardiology",
+      "Neurology",
+      "Gastroenterology",
+      "Orthopaedics",
+      "Surgery"
+    ],
+    "famousFor": "Cardiology, neurology, gastroenterology, orthopaedics and general surgery.",
+    "addressShort": "Noida, UP",
+    "distanceKm": 21,
+    "type": "multispeciality",
+    "doctors": [
+      {
+        "id": "noid-kailash-doc-1",
+        "name": "Dr. Nidhi Agarwal",
+        "specialty": "Gastroenterology",
+        "experienceYears": 12,
+        "rating": 4.6,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      },
+      {
+        "id": "noid-kailash-doc-2",
+        "name": "Dr. Imran Qureshi",
+        "specialty": "Neurology",
+        "experienceYears": 10,
+        "rating": 4.5,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.535,
+    "lng": 77.39
+  },
+  {
+    "id": "noid-yatharth",
+    "name": "Yatharth Super Speciality Hospital",
+    "city": "Noida",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Yatharth+Super+Speciality+Hospital+Noida",
+    "specialties": [
+      "Cardiac Care",
+      "Neurosciences",
+      "Kidney Care",
+      "Orthopaedics",
+      "Gastroenterology"
+    ],
+    "famousFor": "Cardiac care, neurosciences, kidney care, orthopaedics and gastroenterology.",
+    "addressShort": "Noida, UP",
+    "distanceKm": 23,
+    "type": "multispeciality",
+    "doctors": [
+      {
+        "id": "noid-yatharth-doc-1",
+        "name": "Dr. Deepak Sinha",
+        "specialty": "Nephrology",
+        "experienceYears": 14,
+        "rating": 4.7,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.58,
+    "lng": 77.33
+  },
+  {
+    "id": "noid-felix",
+    "name": "Felix Hospital",
+    "city": "Noida",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Felix+Hospital+Noida",
+    "specialties": [
+      "Maternity",
+      "Paediatrics",
+      "Surgery",
+      "Multispeciality"
+    ],
+    "famousFor": "Multispeciality treatment, maternity care, paediatrics and general surgery.",
+    "addressShort": "Noida, UP",
+    "distanceKm": 24,
+    "type": "multispeciality",
+    "doctors": [
+      {
+        "id": "noid-felix-doc-1",
+        "name": "Dr. Anjali Bose",
+        "specialty": "Maternity & Paediatrics",
+        "experienceYears": 11,
+        "rating": 4.6,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.557,
+    "lng": 77.3695
+  },
+  {
+    "id": "noid-prayag",
+    "name": "Prayag Hospital & Research Centre",
+    "city": "Noida",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Prayag+Hospital+Noida",
+    "specialties": [
+      "General Medicine",
+      "Maternity",
+      "Orthopaedics",
+      "Surgery"
+    ],
+    "famousFor": "General medicine, maternity care, orthopaedics and surgical services.",
+    "addressShort": "Noida, UP",
+    "distanceKm": 25,
+    "type": "multispeciality",
+    "doctors": [
+      {
+        "id": "noid-prayag-doc-1",
+        "name": "Dr. Tarun Joshi",
+        "specialty": "Orthopaedics",
+        "experienceYears": 9,
+        "rating": 4.4,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.578,
+    "lng": 77.3485
+  },
+  {
+    "id": "noid-cloudnine",
+    "name": "Cloudnine Hospital",
+    "city": "Noida",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Cloudnine+Hospital+Noida",
+    "specialties": [
+      "Pregnancy",
+      "Childbirth",
+      "Fertility",
+      "Newborn Care"
+    ],
+    "famousFor": "Pregnancy care, childbirth, fertility support and newborn care.",
+    "addressShort": "Noida, UP",
+    "distanceKm": 17,
+    "type": "specialty",
+    "doctors": [
+      {
+        "id": "noid-cloudnine-doc-1",
+        "name": "Dr. Swati Deshmukh",
+        "specialty": "Obstetrics",
+        "experienceYears": 12,
+        "rating": 4.8,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.5355,
+    "lng": 77.391
+  },
+  {
+    "id": "noid-icare",
+    "name": "ICARE Eye Hospital",
+    "city": "Noida",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=ICARE+Eye+Hospital+Noida",
+    "specialties": [
+      "Eye Diseases",
+      "Cataract",
+      "Glaucoma",
+      "Retina"
+    ],
+    "famousFor": "Eye diseases, cataract surgery, glaucoma and retinal disorders.",
+    "addressShort": "Noida, UP",
+    "distanceKm": 16,
+    "type": "specialty",
+    "doctors": [
+      {
+        "id": "noid-icare-doc-1",
+        "name": "Dr. Vikram Luthra",
+        "specialty": "Ophthalmology",
+        "experienceYears": 16,
+        "rating": 4.8,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.535,
+    "lng": 77.35
+  },
+  {
+    "id": "gzb-yashoda",
+    "name": "Yashoda Super Speciality Hospital",
+    "city": "Ghaziabad",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Yashoda+Super+Speciality+Hospital+Ghaziabad",
+    "specialties": [
+      "Cardiology",
+      "Cancer Care",
+      "Neurology",
+      "Kidney Care",
+      "Critical Care"
+    ],
+    "famousFor": "Cardiology, cancer care, neurology, kidney care and critical care.",
+    "addressShort": "Ghaziabad, UP",
+    "distanceKm": 28,
+    "type": "multispeciality",
+    "doctors": [
+      {
+        "id": "gzb-yashoda-doc-1",
+        "name": "Dr. Mohit Saxena",
+        "specialty": "Oncology",
+        "experienceYears": 13,
+        "rating": 4.7,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      },
+      {
+        "id": "gzb-yashoda-doc-2",
+        "name": "Dr. Leena Paul",
+        "specialty": "Cardiology",
+        "experienceYears": 15,
+        "rating": 4.8,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.6692,
+    "lng": 77.4538
+  },
+  {
+    "id": "gzb-max",
+    "name": "Max Super Speciality Hospital",
+    "city": "Ghaziabad",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Max+Super+Speciality+Hospital+Ghaziabad",
+    "specialties": [
+      "Cardiac Sciences",
+      "Oncology",
+      "Orthopaedics",
+      "Multispeciality"
+    ],
+    "famousFor": "Multispeciality care, cardiac sciences, oncology and orthopaedics.",
+    "addressShort": "Ghaziabad, UP",
+    "distanceKm": 27,
+    "type": "multispeciality",
+    "doctors": [
+      {
+        "id": "gzb-max-doc-1",
+        "name": "Dr. Abhishek Rawat",
+        "specialty": "Orthopaedics",
+        "experienceYears": 11,
+        "rating": 4.6,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.669,
+    "lng": 77.45
+  },
+  {
+    "id": "gzb-shanti",
+    "name": "Shanti Gopal Hospital",
+    "city": "Ghaziabad",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Shanti+Gopal+Hospital+Ghaziabad",
+    "specialties": [
+      "General Medicine",
+      "Maternity",
+      "Paediatrics",
+      "Surgery"
+    ],
+    "famousFor": "General medicine, maternity care, paediatrics and surgery.",
+    "addressShort": "Ghaziabad, UP",
+    "distanceKm": 29,
+    "type": "multispeciality",
+    "doctors": [
+      {
+        "id": "gzb-shanti-doc-1",
+        "name": "Dr. Sunita Devi",
+        "specialty": "Paediatrics",
+        "experienceYears": 10,
+        "rating": 4.4,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.7102,
+    "lng": 77.4128
+  },
+  {
+    "id": "gzb-manipal",
+    "name": "Manipal Hospital",
+    "city": "Ghaziabad",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Manipal+Hospital+Ghaziabad",
+    "specialties": [
+      "Orthopaedics",
+      "Cardiology",
+      "Surgery",
+      "Multispeciality"
+    ],
+    "famousFor": "Multispeciality treatment, orthopaedics, cardiology and general surgery.",
+    "addressShort": "Ghaziabad, UP",
+    "distanceKm": 30,
+    "type": "multispeciality",
+    "doctors": [
+      {
+        "id": "gzb-manipal-doc-1",
+        "name": "Dr. Farhan Ali",
+        "specialty": "Cardiology",
+        "experienceYears": 12,
+        "rating": 4.5,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.67,
+    "lng": 77.44
+  },
+  {
+    "id": "gzb-lecrest",
+    "name": "Le Crest Hospital",
+    "city": "Ghaziabad",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Le+Crest+Hospital+Ghaziabad",
+    "specialties": [
+      "General Healthcare",
+      "Multispeciality"
+    ],
+    "famousFor": "General healthcare and multispeciality services.",
+    "addressShort": "Ghaziabad, UP",
+    "distanceKm": 31,
+    "type": "multispeciality",
+    "doctors": [
+      {
+        "id": "gzb-lecrest-doc-1",
+        "name": "Dr. Geeta Menon",
+        "specialty": "General Medicine",
+        "experienceYears": 8,
+        "rating": 4.2,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.6857,
+    "lng": 77.4373
+  },
+  {
+    "id": "gzb-narinder",
+    "name": "Narinder Mohan Hospital & Heart Centre",
+    "city": "Ghaziabad",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Narinder+Mohan+Hospital+Ghaziabad",
+    "specialties": [
+      "Heart Care",
+      "General Medicine",
+      "Surgery",
+      "Emergency"
+    ],
+    "famousFor": "Heart care, general medicine, surgery and emergency services.",
+    "addressShort": "Ghaziabad, UP",
+    "distanceKm": 26,
+    "type": "specialty",
+    "doctors": [
+      {
+        "id": "gzb-narinder-doc-1",
+        "name": "Dr. Pankaj Bhatia",
+        "specialty": "Cardiology",
+        "experienceYears": 14,
+        "rating": 4.6,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.7062,
+    "lng": 77.4168
+  },
+  {
+    "id": "gzb-yashoda-nehru",
+    "name": "Yashoda Hospital (Nehru Nagar)",
+    "city": "Ghaziabad",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Yashoda+Hospital+Nehru+Nagar+Ghaziabad",
+    "specialties": [
+      "Cardiology",
+      "Cancer",
+      "Bariatric Surgery",
+      "Gastroenterology",
+      "Critical Care"
+    ],
+    "famousFor": "Cardiology, cancer treatment, bariatric surgery, gastroenterology and critical care.",
+    "addressShort": "Nehru Nagar, Ghaziabad",
+    "distanceKm": 27,
+    "type": "multispeciality",
+    "doctors": [
+      {
+        "id": "gzb-yashoda-nehru-doc-1",
+        "name": "Dr. Reena Kapur",
+        "specialty": "Gastroenterology",
+        "experienceYears": 13,
+        "rating": 4.7,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.7177,
+    "lng": 77.4053
+  },
+  {
+    "id": "del-aiims",
+    "name": "AIIMS Delhi",
+    "city": "Delhi",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=AIIMS+Delhi",
+    "specialties": [
+      "Complex Surgery",
+      "Cancer",
+      "Neurosciences",
+      "Research",
+      "Specialist Care"
+    ],
+    "famousFor": "Advanced specialist care, complex surgeries, cancer treatment, neurosciences and research.",
+    "addressShort": "Ansari Nagar, New Delhi",
+    "distanceKm": 12,
+    "type": "government",
+    "doctors": [
+      {
+        "id": "del-aiims-doc-1",
+        "name": "Dr. Ramesh Chandra",
+        "specialty": "Neurosciences",
+        "experienceYears": 22,
+        "rating": 4.9,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      },
+      {
+        "id": "del-aiims-doc-2",
+        "name": "Dr. Anita Desai",
+        "specialty": "Oncology",
+        "experienceYears": 18,
+        "rating": 4.9,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.5672,
+    "lng": 77.21
+  },
+  {
+    "id": "del-apollo",
+    "name": "Indraprastha Apollo Hospital",
+    "city": "Delhi",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Indraprastha+Apollo+Hospital+Delhi",
+    "specialties": [
+      "Cardiology",
+      "Cancer",
+      "Transplants",
+      "Neurosciences",
+      "Orthopaedics"
+    ],
+    "famousFor": "Cardiology, cancer treatment, liver and kidney transplants, neurosciences and orthopaedics.",
+    "addressShort": "Sarita Vihar, New Delhi",
+    "distanceKm": 14,
+    "type": "multispeciality",
+    "doctors": [
+      {
+        "id": "del-apollo-doc-1",
+        "name": "Dr. Sameer Kohli",
+        "specialty": "Transplant Surgery",
+        "experienceYears": 16,
+        "rating": 4.8,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.54,
+    "lng": 77.285
+  },
+  {
+    "id": "del-gangaram",
+    "name": "Sir Ganga Ram Hospital",
+    "city": "Delhi",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Sir+Ganga+Ram+Hospital+Delhi",
+    "specialties": [
+      "Gastroenterology",
+      "Organ Transplants",
+      "Cardiac Care",
+      "Surgery"
+    ],
+    "famousFor": "Gastroenterology, organ transplants, cardiac care and advanced surgery.",
+    "addressShort": "Rajinder Nagar, New Delhi",
+    "distanceKm": 11,
+    "type": "multispeciality",
+    "doctors": [
+      {
+        "id": "del-gangaram-doc-1",
+        "name": "Dr. Hitesh Malhotra",
+        "specialty": "Gastroenterology",
+        "experienceYears": 15,
+        "rating": 4.8,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.638,
+    "lng": 77.189
+  },
+  {
+    "id": "del-max-saket",
+    "name": "Max Super Speciality Hospital Saket",
+    "city": "Delhi",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Max+Super+Speciality+Hospital+Saket+Delhi",
+    "specialties": [
+      "Oncology",
+      "Cardiac Sciences",
+      "Neurosciences",
+      "Kidney Care",
+      "Transplants"
+    ],
+    "famousFor": "Oncology, cardiac sciences, neurosciences, kidney care and organ transplants.",
+    "addressShort": "Saket, New Delhi",
+    "distanceKm": 13,
+    "type": "multispeciality",
+    "doctors": [
+      {
+        "id": "del-max-saket-doc-1",
+        "name": "Dr. Kritika Bose",
+        "specialty": "Oncology",
+        "experienceYears": 12,
+        "rating": 4.7,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.528,
+    "lng": 77.215
+  },
+  {
+    "id": "del-blk",
+    "name": "BLK-Max Super Speciality Hospital",
+    "city": "Delhi",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=BLK+Max+Hospital+Delhi",
+    "specialties": [
+      "Bone Marrow Transplant",
+      "Cancer",
+      "Organ Transplants",
+      "Cardiac Care"
+    ],
+    "famousFor": "Bone marrow transplants, cancer treatment, organ transplants and cardiac care.",
+    "addressShort": "Pusa Road, New Delhi",
+    "distanceKm": 10,
+    "type": "multispeciality",
+    "doctors": [
+      {
+        "id": "del-blk-doc-1",
+        "name": "Dr. Nikhil Oberoi",
+        "specialty": "Haematology",
+        "experienceYears": 14,
+        "rating": 4.8,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.643,
+    "lng": 77.187
+  },
+  {
+    "id": "del-fortis-escorts",
+    "name": "Fortis Escorts Heart Institute",
+    "city": "Delhi",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Fortis+Escorts+Heart+Institute+Delhi",
+    "specialties": [
+      "Cardiology",
+      "Cardiac Surgery",
+      "Heart Rhythm",
+      "Paediatric Cardiac"
+    ],
+    "famousFor": "Cardiology, cardiac surgery, heart rhythm disorders and paediatric cardiac care.",
+    "addressShort": "Okhla Road, New Delhi",
+    "distanceKm": 15,
+    "type": "specialty",
+    "doctors": [
+      {
+        "id": "del-fortis-escorts-doc-1",
+        "name": "Dr. Ashok Seth",
+        "specialty": "Interventional Cardiology",
+        "experienceYears": 25,
+        "rating": 4.9,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.56,
+    "lng": 77.275
+  },
+  {
+    "id": "del-safdarjung",
+    "name": "Safdarjung Hospital",
+    "city": "Delhi",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Safdarjung+Hospital+Delhi",
+    "specialties": [
+      "Emergency",
+      "Trauma",
+      "Orthopaedics",
+      "Burns",
+      "Surgery"
+    ],
+    "famousFor": "Emergency care, trauma, orthopaedics, burns and general surgery.",
+    "addressShort": "Ansari Nagar West, New Delhi",
+    "distanceKm": 12,
+    "type": "government",
+    "doctors": [
+      {
+        "id": "del-safdarjung-doc-1",
+        "name": "Dr. Yogesh Pal",
+        "specialty": "Trauma Surgery",
+        "experienceYears": 14,
+        "rating": 4.5,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.57,
+    "lng": 77.205
+  },
+  {
+    "id": "del-rml",
+    "name": "Dr. Ram Manohar Lohia Hospital",
+    "city": "Delhi",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Dr+Ram+Manohar+Lohia+Hospital+Delhi",
+    "specialties": [
+      "General Medicine",
+      "Surgery",
+      "Emergency"
+    ],
+    "famousFor": "General medicine, specialist consultations, surgery and emergency care.",
+    "addressShort": "Connaught Place, New Delhi",
+    "distanceKm": 9,
+    "type": "government",
+    "doctors": [
+      {
+        "id": "del-rml-doc-1",
+        "name": "Dr. Bhavna Tiwari",
+        "specialty": "General Medicine",
+        "experienceYears": 11,
+        "rating": 4.4,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.625,
+    "lng": 77.21
+  },
+  {
+    "id": "del-loknayak",
+    "name": "Lok Nayak Hospital",
+    "city": "Delhi",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Lok+Nayak+Hospital+Delhi",
+    "specialties": [
+      "Emergency",
+      "Trauma",
+      "General Medicine",
+      "Surgery",
+      "Paediatrics"
+    ],
+    "famousFor": "Emergency and trauma care, general medicine, surgery and paediatrics.",
+    "addressShort": "Delhi Gate, New Delhi",
+    "distanceKm": 8,
+    "type": "government",
+    "doctors": [
+      {
+        "id": "del-loknayak-doc-1",
+        "name": "Dr. Irfan Hussain",
+        "specialty": "Emergency Medicine",
+        "experienceYears": 10,
+        "rating": 4.3,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.642,
+    "lng": 77.238
+  },
+  {
+    "id": "del-gtb",
+    "name": "Guru Teg Bahadur Hospital",
+    "city": "Delhi",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Guru+Teg+Bahadur+Hospital+Delhi",
+    "specialties": [
+      "Emergency",
+      "Surgery",
+      "Medicine",
+      "Trauma"
+    ],
+    "famousFor": "Emergency medicine, general surgery, medicine and trauma care.",
+    "addressShort": "Dilshad Garden, Delhi",
+    "distanceKm": 18,
+    "type": "government",
+    "doctors": [
+      {
+        "id": "del-gtb-doc-1",
+        "name": "Dr. Kamaljeet Kaur",
+        "specialty": "General Surgery",
+        "experienceYears": 9,
+        "rating": 4.3,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.685,
+    "lng": 77.31
+  },
+  {
+    "id": "del-moolchand",
+    "name": "Moolchand Hospital",
+    "city": "Delhi",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Moolchand+Hospital+Delhi",
+    "specialties": [
+      "Orthopaedics",
+      "Spine",
+      "Cardiology",
+      "Maternity"
+    ],
+    "famousFor": "Orthopaedics, spine care, cardiology, maternity and minimally invasive surgery.",
+    "addressShort": "Lajpat Nagar, New Delhi",
+    "distanceKm": 11,
+    "type": "multispeciality",
+    "doctors": [
+      {
+        "id": "del-moolchand-doc-1",
+        "name": "Dr. Sonal Bedi",
+        "specialty": "Spine Surgery",
+        "experienceYears": 13,
+        "rating": 4.7,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.57,
+    "lng": 77.24
+  },
+  {
+    "id": "del-ig",
+    "name": "Indira Gandhi Hospital",
+    "city": "Delhi",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Indira+Gandhi+Hospital+Dwarka+Delhi",
+    "specialties": [
+      "General Medicine",
+      "Maternity",
+      "Paediatrics",
+      "Emergency"
+    ],
+    "famousFor": "General medicine, maternity services, paediatrics and emergency care.",
+    "addressShort": "Dwarka, New Delhi",
+    "distanceKm": 20,
+    "type": "government",
+    "doctors": [
+      {
+        "id": "del-ig-doc-1",
+        "name": "Dr. Preeti Malik",
+        "specialty": "Maternity",
+        "experienceYears": 8,
+        "rating": 4.4,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.592,
+    "lng": 77.045
+  },
+  {
+    "id": "del-fortis-shalimar",
+    "name": "Fortis Hospital Shalimar Bagh",
+    "city": "Delhi",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Fortis+Hospital+Shalimar+Bagh+Delhi",
+    "specialties": [
+      "Cardiac Care",
+      "Oncology",
+      "Neurosciences",
+      "Orthopaedics"
+    ],
+    "famousFor": "Cardiac care, oncology, neurosciences and orthopaedics.",
+    "addressShort": "Shalimar Bagh, New Delhi",
+    "distanceKm": 16,
+    "type": "multispeciality",
+    "doctors": [
+      {
+        "id": "del-fortis-shalimar-doc-1",
+        "name": "Dr. Aditya Grewal",
+        "specialty": "Cardiology",
+        "experienceYears": 12,
+        "rating": 4.6,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.71,
+    "lng": 77.16
+  },
+  {
+    "id": "del-action",
+    "name": "Action Cancer Hospital",
+    "city": "Delhi",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Action+Cancer+Hospital+Delhi",
+    "specialties": [
+      "Cancer Diagnosis",
+      "Medical Oncology",
+      "Radiation",
+      "Surgical Oncology"
+    ],
+    "famousFor": "Cancer diagnosis, medical oncology, radiation therapy and surgical oncology.",
+    "addressShort": "Paschim Vihar, New Delhi",
+    "distanceKm": 17,
+    "type": "specialty",
+    "doctors": [
+      {
+        "id": "del-action-doc-1",
+        "name": "Dr. Nandini Rao",
+        "specialty": "Medical Oncology",
+        "experienceYears": 14,
+        "rating": 4.8,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.67,
+    "lng": 77.1
+  },
+  {
+    "id": "del-rgci",
+    "name": "Rajiv Gandhi Cancer Institute & Research Centre",
+    "city": "Delhi",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Rajiv+Gandhi+Cancer+Institute+Delhi",
+    "specialties": [
+      "Cancer Diagnosis",
+      "Chemotherapy",
+      "Radiation",
+      "Cancer Surgery"
+    ],
+    "famousFor": "Cancer diagnosis, chemotherapy, radiation therapy and cancer surgery.",
+    "addressShort": "Rohini, New Delhi",
+    "distanceKm": 19,
+    "type": "specialty",
+    "doctors": [
+      {
+        "id": "del-rgci-doc-1",
+        "name": "Dr. Prateek Suri",
+        "specialty": "Surgical Oncology",
+        "experienceYears": 16,
+        "rating": 4.8,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.72,
+    "lng": 77.11
+  },
+  {
+    "id": "ggn-medanta",
+    "name": "Medanta \u2013 The Medicity",
+    "city": "Gurugram",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Medanta+The+Medicity+Gurugram",
+    "specialties": [
+      "Cardiac Care",
+      "Cancer",
+      "Neurosciences",
+      "Liver Transplant",
+      "Kidney Care",
+      "BMT"
+    ],
+    "famousFor": "Cardiac care, cancer treatment, neurosciences, liver transplants, kidney care and bone marrow transplants.",
+    "addressShort": "Sector 38, Gurugram",
+    "distanceKm": 28,
+    "type": "multispeciality",
+    "doctors": [
+      {
+        "id": "ggn-medanta-doc-1",
+        "name": "Dr. Naresh Trehan",
+        "specialty": "Cardiac Surgery",
+        "experienceYears": 30,
+        "rating": 5.0,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      },
+      {
+        "id": "ggn-medanta-doc-2",
+        "name": "Dr. Ishita Roy",
+        "specialty": "Neurosciences",
+        "experienceYears": 14,
+        "rating": 4.8,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.42,
+    "lng": 77.04
+  },
+  {
+    "id": "ggn-artemis",
+    "name": "Artemis Hospital",
+    "city": "Gurugram",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Artemis+Hospital+Gurugram",
+    "specialties": [
+      "Oncology",
+      "Cardiac Sciences",
+      "Neurosciences",
+      "Orthopaedics",
+      "Transplants"
+    ],
+    "famousFor": "Oncology, cardiac sciences, neurosciences, orthopaedics and organ transplants.",
+    "addressShort": "Sector 51, Gurugram",
+    "distanceKm": 30,
+    "type": "multispeciality",
+    "doctors": [
+      {
+        "id": "ggn-artemis-doc-1",
+        "name": "Dr. Varun Mehta",
+        "specialty": "Oncology",
+        "experienceYears": 13,
+        "rating": 4.7,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.43,
+    "lng": 77.07
+  },
+  {
+    "id": "ggn-fortis-mri",
+    "name": "Fortis Memorial Research Institute",
+    "city": "Gurugram",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Fortis+Memorial+Research+Institute+Gurugram",
+    "specialties": [
+      "Cardiac Care",
+      "Neurosciences",
+      "Oncology",
+      "Orthopaedics"
+    ],
+    "famousFor": "Cardiac care, neurosciences, oncology, orthopaedics and complex surgeries.",
+    "addressShort": "Sector 44, Gurugram",
+    "distanceKm": 29,
+    "type": "multispeciality",
+    "doctors": [
+      {
+        "id": "ggn-fortis-mri-doc-1",
+        "name": "Dr. Shalini Kapoor",
+        "specialty": "Neurosciences",
+        "experienceYears": 15,
+        "rating": 4.8,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.45,
+    "lng": 77.07
+  },
+  {
+    "id": "ggn-max",
+    "name": "Max Hospital Gurugram",
+    "city": "Gurugram",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Max+Hospital+Gurugram",
+    "specialties": [
+      "Cardiology",
+      "Oncology",
+      "Orthopaedics",
+      "Neurology",
+      "Multispeciality"
+    ],
+    "famousFor": "Multispeciality care, cardiology, oncology, orthopaedics and neurology.",
+    "addressShort": "Sushant Lok, Gurugram",
+    "distanceKm": 27,
+    "type": "multispeciality",
+    "doctors": [
+      {
+        "id": "ggn-max-doc-1",
+        "name": "Dr. Rohit Nanda",
+        "specialty": "Orthopaedics",
+        "experienceYears": 11,
+        "rating": 4.6,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.46,
+    "lng": 77.08
+  },
+  {
+    "id": "ggn-manipal",
+    "name": "Manipal Hospital Gurugram",
+    "city": "Gurugram",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Manipal+Hospital+Gurugram",
+    "specialties": [
+      "Cardiac Care",
+      "Orthopaedics",
+      "Oncology",
+      "Surgery"
+    ],
+    "famousFor": "Multispeciality treatment, cardiac care, orthopaedics, oncology and general surgery.",
+    "addressShort": "Palam Vihar, Gurugram",
+    "distanceKm": 31,
+    "type": "multispeciality",
+    "doctors": [
+      {
+        "id": "ggn-manipal-doc-1",
+        "name": "Dr. Meenakshi Das",
+        "specialty": "General Surgery",
+        "experienceYears": 10,
+        "rating": 4.5,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.48,
+    "lng": 77.03
+  },
+  {
+    "id": "fbd-asian",
+    "name": "Asian Institute of Medical Sciences",
+    "city": "Faridabad",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Asian+Institute+of+Medical+Sciences+Faridabad",
+    "specialties": [
+      "Cardiology",
+      "Neurosciences",
+      "Oncology",
+      "Orthopaedics",
+      "Critical Care"
+    ],
+    "famousFor": "Cardiology, neurosciences, oncology, orthopaedics and critical care.",
+    "addressShort": "Sector 21A, Faridabad",
+    "distanceKm": 32,
+    "type": "multispeciality",
+    "doctors": [
+      {
+        "id": "fbd-asian-doc-1",
+        "name": "Dr. Kunal Bhardwaj",
+        "specialty": "Cardiology",
+        "experienceYears": 12,
+        "rating": 4.6,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.41,
+    "lng": 77.31
+  },
+  {
+    "id": "fbd-fortis",
+    "name": "Fortis Escorts Hospital Faridabad",
+    "city": "Faridabad",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Fortis+Escorts+Hospital+Faridabad",
+    "specialties": [
+      "Cardiac Care",
+      "General Medicine",
+      "Orthopaedics",
+      "Emergency"
+    ],
+    "famousFor": "Cardiac care, general medicine, orthopaedics and emergency services.",
+    "addressShort": "Faridabad, HR",
+    "distanceKm": 33,
+    "type": "multispeciality",
+    "doctors": [
+      {
+        "id": "fbd-fortis-doc-1",
+        "name": "Dr. Ayesha Khan",
+        "specialty": "Emergency Medicine",
+        "experienceYears": 9,
+        "rating": 4.4,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.4,
+    "lng": 77.32
+  },
+  {
+    "id": "fbd-metro",
+    "name": "Metro Heart Institute",
+    "city": "Faridabad",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Metro+Heart+Institute+Faridabad",
+    "specialties": [
+      "Cardiology",
+      "Cardiac Surgery"
+    ],
+    "famousFor": "Cardiology, cardiac surgery and cardiovascular disease management.",
+    "addressShort": "Faridabad, HR",
+    "distanceKm": 34,
+    "type": "specialty",
+    "doctors": [
+      {
+        "id": "fbd-metro-doc-1",
+        "name": "Dr. Suresh Nair",
+        "specialty": "Cardiac Surgery",
+        "experienceYears": 17,
+        "rating": 4.8,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.405,
+    "lng": 77.315
+  },
+  {
+    "id": "fbd-amrita",
+    "name": "Amrita Hospital",
+    "city": "Faridabad",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Amrita+Hospital+Faridabad",
+    "specialties": [
+      "Neurosciences",
+      "Oncology",
+      "Cardiac Sciences",
+      "Organ Transplants"
+    ],
+    "famousFor": "Multispeciality care, neurosciences, oncology, cardiac sciences and organ transplants.",
+    "addressShort": "Faridabad, HR",
+    "distanceKm": 35,
+    "type": "multispeciality",
+    "doctors": [
+      {
+        "id": "fbd-amrita-doc-1",
+        "name": "Dr. Divya Menon",
+        "specialty": "Neurosciences",
+        "experienceYears": 11,
+        "rating": 4.6,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.395,
+    "lng": 77.3
+  },
+  {
+    "id": "fbd-qrg",
+    "name": "QRG Health City (Marengo Asia Hospitals)",
+    "city": "Faridabad",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Marengo+Asia+Hospitals+Faridabad",
+    "specialties": [
+      "Cardiology",
+      "Neurosciences",
+      "Orthopaedics",
+      "Gastroenterology",
+      "Critical Care"
+    ],
+    "famousFor": "Cardiology, neurosciences, orthopaedics, gastroenterology and critical care.",
+    "addressShort": "Faridabad, HR",
+    "distanceKm": 33,
+    "type": "multispeciality",
+    "doctors": [
+      {
+        "id": "fbd-qrg-doc-1",
+        "name": "Dr. Hemant Joshi",
+        "specialty": "Gastroenterology",
+        "experienceYears": 12,
+        "rating": 4.5,
+        "slots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00"
+        ]
+      }
+    ],
+    "lat": 28.408,
+    "lng": 77.318
+  }
+]

@@ -11,6 +11,7 @@ import { PatientRequestList } from './PatientRequestList';
 import { PatientTrackingView } from './PatientTrackingView';
 import { PatientDonorsView } from './PatientDonorsView';
 import { PatientGuidanceView } from './PatientGuidanceView';
+import { PatientAppointmentView } from './PatientAppointmentView';
 import { useRouter } from '../../context/RouterContext';
 
 export const PatientPortal: React.FC = () => {
@@ -28,6 +29,7 @@ export const PatientPortal: React.FC = () => {
     if (path.includes('/patient/donors')) return 'donors';
     if (path.includes('/patient/request')) return 'request';
     if (path.includes('/patient/guidance') || path.includes('/patient/help')) return 'guidance';
+    if (path.includes('/patient/appointment')) return 'appointment';
     return 'overview';
   };
 
@@ -87,6 +89,9 @@ export const PatientPortal: React.FC = () => {
         break;
       case 'guidance':
         navigate('/patient/guidance');
+        break;
+      case 'appointment':
+        navigate('/patient/appointment');
         break;
     }
   };
@@ -162,6 +167,10 @@ export const PatientPortal: React.FC = () => {
       {activeTab === 'donors' && <PatientDonorsView />}
 
       {activeTab === 'guidance' && <PatientGuidanceView />}
+
+      {activeTab === 'appointment' && (
+        <PatientAppointmentView onCancel={() => handleSelectTab('overview')} />
+      )}
     </PatientShell>
   );
 };
