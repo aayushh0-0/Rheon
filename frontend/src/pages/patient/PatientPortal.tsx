@@ -24,6 +24,8 @@ export const PatientPortal: React.FC = () => {
     if (path.includes('/patient/trends')) return 'trends';
     if (path.includes('/patient/history')) return 'history';
     if (path.includes('/patient/pdf')) return 'pdf';
+    // appointment before request — paths must not collide
+    if (path.includes('/patient/appointment')) return 'appointment';
     if (path.includes('/patient/requests')) return 'requests';
     if (path.includes('/patient/track') || path.includes('/patient/tracking')) return 'tracking';
     if (path.includes('/patient/donors')) return 'donors';

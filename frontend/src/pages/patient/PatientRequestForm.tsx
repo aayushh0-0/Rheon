@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useRef, useCallback } from 'react';
 import {
   PlusCircle,
   ShieldCheck,
@@ -55,6 +55,8 @@ export const PatientRequestForm: React.FC<PatientRequestFormProps> = ({
   const [locating, setLocating] = useState(false);
   const [locationError, setLocationError] = useState<string | null>(null);
   const [filterNearestOnly, setFilterNearestOnly] = useState(false);
+  const [mapOpen, setMapOpen] = useState(false);
+  const [mapDraft, setMapDraft] = useState<{ lat: number; lng: number } | null>(null);
 
   const haversineKm = (a: { lat: number; lng: number }, b: { lat: number; lng: number }) => {
     const R = 6371;
@@ -94,25 +96,44 @@ export const PatientRequestForm: React.FC<PatientRequestFormProps> = ({
     }
   }, [eligibleHospitals, hospitalId]);
 
+  const openMapPicker = () => {
+    setLocationError(null);
+    setMapDraft(userCoords);
+    setMapOpen(true);
+  };
+
+  const confirmMapLocation = (coords: { lat: number; lng: number }) => {
+    setUserCoords(coords);
+    setFilterNearestOnly(true);
+    setMapOpen(false);
+    setMapDraft(null);
+  };
+
+  /** GPS first, then open map so user can fine-tune the pin */
   const useMyLocation = () => {
     setLocationError(null);
+    setMapOpen(true);
+    setMapDraft(userCoords);
     if (!navigator.geolocation) {
-      setLocationError('Geolocation is not supported in this browser.');
+      setLocationError('Geolocation not available — click the map to set your location.');
+      // Default center: Delhi NCR
+      if (!userCoords) setMapDraft({ lat: 28.6139, lng: 77.209 });
       return;
     }
     setLocating(true);
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        setUserCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude });
-        setFilterNearestOnly(true);
+        const c = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+        setMapDraft(c);
         setLocating(false);
       },
       (err) => {
         setLocating(false);
+        if (!userCoords) setMapDraft({ lat: 28.6139, lng: 77.209 });
         setLocationError(
           err.code === 1
-            ? 'Location permission denied. Allow location to rank nearest hospitals.'
-            : 'Could not read current location. Try again or pick a hospital manually.'
+            ? 'Location permission denied. Click the map to place your pin manually.'
+            : 'GPS unavailable. Click the map to place your pin manually.'
         );
       },
       { enableHighAccuracy: true, timeout: 12000, maximumAge: 60_000 }
@@ -286,15 +307,25 @@ export const PatientRequestForm: React.FC<PatientRequestFormProps> = ({
                 )}
               </p>
             </div>
-            <button
-              type="button"
-              onClick={useMyLocation}
-              disabled={locating}
-              className="shrink-0 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-full text-[11px] font-bold bg-teal-brand text-white disabled:opacity-50"
-            >
-              <Navigation className="w-3.5 h-3.5" />
-              {locating ? 'Locating…' : userCoords ? 'Update location' : 'Use my current location'}
-            </button>
+            <div className="flex flex-wrap gap-2 shrink-0">
+              <button
+                type="button"
+                onClick={useMyLocation}
+                disabled={locating}
+                className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-full text-[11px] font-bold bg-teal-brand text-white disabled:opacity-50"
+              >
+                <Navigation className="w-3.5 h-3.5" />
+                {locating ? 'Locating…' : userCoords ? 'Update location' : 'Use my current location'}
+              </button>
+              <button
+                type="button"
+                onClick={openMapPicker}
+                className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-full text-[11px] font-bold border border-shell-border bg-white text-ink-primary hover:bg-shell-bg"
+              >
+                <MapPin className="w-3.5 h-3.5 text-teal-brand" />
+                Pick on map
+              </button>
+            </div>
           </div>
           {locationError && (
             <p className="text-[11px] text-crimson font-medium flex items-center gap-1">
@@ -540,6 +571,202 @@ export const PatientRequestForm: React.FC<PatientRequestFormProps> = ({
           </button>
         </div>
       </form>
+
+      {mapOpen && (
+        <MapLocationModal
+          initial={mapDraft || userCoords || { lat: 28.6139, lng: 77.209 }}
+          locating={locating}
+          onClose={() => {
+            setMapOpen(false);
+            setMapDraft(null);
+          }}
+          onConfirm={confirmMapLocation}
+          onUseGps={useMyLocation}
+        />
+      )}
     </div>
   );
 };
+
+
+/** Map picker without external CDN — GPS + clickable NCR map + lat/lng confirm */
+function MapLocationModal({
+  initial,
+  locating,
+  onClose,
+  onConfirm,
+  onUseGps,
+}: {
+  initial: { lat: number; lng: number };
+  locating: boolean;
+  onClose: () => void;
+  onConfirm: (c: { lat: number; lng: number }) => void;
+  onUseGps: () => void;
+}) {
+  const [draft, setDraft] = useState(initial);
+  const mapBoxRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setDraft(initial);
+  }, [initial.lat, initial.lng]);
+
+  // Approximate Delhi NCR bounds for click-to-pin
+  const BOUNDS = { north: 28.92, south: 28.28, west: 76.82, east: 77.58 };
+
+  const pinStyle = (() => {
+    const { north, south, west, east } = BOUNDS;
+    const x = ((draft.lng - west) / (east - west)) * 100;
+    const y = ((north - draft.lat) / (north - south)) * 100;
+    return {
+      left: `${Math.min(98, Math.max(2, x))}%`,
+      top: `${Math.min(98, Math.max(2, y))}%`,
+    };
+  })();
+
+  const onMapClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = mapBoxRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width;
+    const py = (e.clientY - rect.top) / rect.height;
+    const lng = BOUNDS.west + px * (BOUNDS.east - BOUNDS.west);
+    const lat = BOUNDS.north - py * (BOUNDS.north - BOUNDS.south);
+    setDraft({
+      lat: Math.round(lat * 1e5) / 1e5,
+      lng: Math.round(lng * 1e5) / 1e5,
+    });
+  };
+
+  const osmEmbed = `https://www.openstreetmap.org/export/embed.html?bbox=${draft.lng - 0.06}%2C${draft.lat - 0.04}%2C${draft.lng + 0.06}%2C${draft.lat + 0.04}&layer=mapnik&marker=${draft.lat}%2C${draft.lng}`;
+
+  return (
+    <div className="fixed inset-0 z-[80] flex items-center justify-center p-4 bg-ink-primary/40 backdrop-blur-[2px]">
+      <div
+        role="dialog"
+        aria-label="Pick location on map"
+        className="bg-white rounded-3xl border border-shell-border shadow-xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]"
+      >
+        <div className="px-5 py-4 border-b border-shell-border flex items-start justify-between gap-3">
+          <div>
+            <h3 className="text-sm font-bold text-ink-primary flex items-center gap-1.5">
+              <MapPin className="w-4 h-4 text-teal-brand" />
+              Set your location
+            </h3>
+            <p className="text-[11px] text-ink-secondary mt-0.5">
+              Use GPS, tap the map grid, or edit coordinates — then confirm.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-xs font-bold text-ink-secondary hover:text-ink-primary px-2 py-1"
+          >
+            Close
+          </button>
+        </div>
+
+        <div className="relative">
+          {/* Live OSM preview (read-only embed) */}
+          <iframe
+            title="OpenStreetMap preview"
+            src={osmEmbed}
+            className="w-full h-40 border-0 bg-shell-bg"
+          />
+          {/* Clickable NCR overlay for precise pin without CDN scripts */}
+          <div className="px-4 pt-2">
+            <p className="text-[10px] font-bold text-ink-secondary uppercase mb-1">
+              Tap to place pin (Delhi NCR)
+            </p>
+            <div
+              ref={mapBoxRef}
+              onClick={onMapClick}
+              className="relative w-full h-36 rounded-2xl border border-shell-border overflow-hidden cursor-crosshair select-none"
+              style={{
+                background:
+                  'linear-gradient(135deg, #ecfdf5 0%, #e0f2fe 45%, #f0fdfa 100%)',
+              }}
+            >
+              <div className="absolute inset-0 opacity-30"
+                style={{
+                  backgroundImage:
+                    'linear-gradient(#0f766e22 1px, transparent 1px), linear-gradient(90deg, #0f766e22 1px, transparent 1px)',
+                  backgroundSize: '24px 24px',
+                }}
+              />
+              <span className="absolute top-1 left-2 text-[9px] font-bold text-ink-secondary">N</span>
+              <span className="absolute bottom-1 left-2 text-[9px] font-bold text-ink-secondary">Gurugram · Delhi · Noida</span>
+              <span
+                className="absolute w-4 h-4 -ml-2 -mt-4 pointer-events-none"
+                style={pinStyle}
+              >
+                <span className="block w-4 h-4 rounded-full bg-crimson border-2 border-white shadow-md" />
+              </span>
+              {locating && (
+                <div className="absolute inset-0 bg-white/70 flex items-center justify-center text-xs font-bold text-teal-brand">
+                  Getting GPS…
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="px-5 py-3 space-y-3 border-t border-shell-border">
+          <div className="grid grid-cols-2 gap-2">
+            <label className="text-[10px] font-bold text-ink-secondary uppercase">
+              Latitude
+              <input
+                type="number"
+                step="0.0001"
+                value={Number(draft.lat.toFixed(5))}
+                onChange={(e) => {
+                  const lat = parseFloat(e.target.value);
+                  if (!Number.isNaN(lat)) setDraft((d) => ({ ...d, lat }));
+                }}
+                className="mt-1 w-full px-3 py-2 rounded-xl border border-shell-border bg-shell-bg text-xs font-semibold"
+              />
+            </label>
+            <label className="text-[10px] font-bold text-ink-secondary uppercase">
+              Longitude
+              <input
+                type="number"
+                step="0.0001"
+                value={Number(draft.lng.toFixed(5))}
+                onChange={(e) => {
+                  const lng = parseFloat(e.target.value);
+                  if (!Number.isNaN(lng)) setDraft((d) => ({ ...d, lng }));
+                }}
+                className="mt-1 w-full px-3 py-2 rounded-xl border border-shell-border bg-shell-bg text-xs font-semibold"
+              />
+            </label>
+          </div>
+          <div className="flex flex-wrap justify-between gap-2">
+            <button
+              type="button"
+              onClick={onUseGps}
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-[11px] font-bold border border-shell-border bg-white"
+            >
+              <Navigation className="w-3.5 h-3.5 text-teal-brand" />
+              Re-run GPS
+            </button>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-4 py-2 rounded-full text-[11px] font-bold text-ink-secondary hover:bg-shell-bg"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => onConfirm(draft)}
+                className="px-4 py-2 rounded-full text-[11px] font-bold bg-teal-brand text-white"
+              >
+                Use this location
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

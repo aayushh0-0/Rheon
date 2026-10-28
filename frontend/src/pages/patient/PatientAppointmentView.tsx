@@ -33,7 +33,7 @@ function formatTime12(t: string) {
 }
 
 export const PatientAppointmentView: React.FC<Props> = ({ onSuccess, onCancel }) => {
-  const { user, addAppointment, appointments, bookedSlotKeys } = useAuth();
+  const { user, addAppointment, appointments, bookedSlotKeys, updateAppointment } = useAuth();
 
   const [step, setStep] = useState<Step>('list');
   const [problem, setProblem] = useState('');
@@ -53,19 +53,28 @@ export const PatientAppointmentView: React.FC<Props> = ({ onSuccess, onCancel })
   const [expandedAppt, setExpandedAppt] = useState<string | null>(null);
   const [rankingReady, setRankingReady] = useState(false);
 
-  const myAppointments = useMemo(() => {
-    const mine = (appointments || []).filter(
-      (a) => a.patient_email === user?.email || a.patient_name === user?.name
+  const isMine = (a: PatientAppointment) => {
+    if (!user) return true;
+    const email = (user.email || '').toLowerCase();
+    const name = (user.name || '').toLowerCase();
+    return (
+      (a.patient_email || '').toLowerCase() === email ||
+      (a.patient_name || '').toLowerCase() === name ||
+      // demo: show all portal bookings so admin↔patient status stays visible
+      a.patient_email?.includes('patientcare') ||
+      a.patient_name?.toLowerCase().includes('priya')
     );
+  };
+
+  const myAppointments = useMemo(() => {
+    const mine = (appointments || []).filter(isMine);
     if (historyFilter === 'ALL') return mine;
     if (historyFilter === 'FOLLOW_UP') return mine.filter((a) => !!a.reappointment_date && a.status !== 'CANCELLED');
     return mine.filter((a) => a.status === historyFilter);
   }, [appointments, user, historyFilter]);
 
   const historyCounts = useMemo(() => {
-    const mine = (appointments || []).filter(
-      (a) => a.patient_email === user?.email || a.patient_name === user?.name
-    );
+    const mine = (appointments || []).filter(isMine);
     return {
       ALL: mine.length,
       BOOKED: mine.filter((a) => a.status === 'BOOKED').length,
@@ -297,15 +306,29 @@ export const PatientAppointmentView: React.FC<Props> = ({ onSuccess, onCancel })
                               <p>{a.prescription ? a.prescription.advice : 'Prescription will appear after the doctor completes the visit.'}</p>
                             </div>
                             <div className="text-[11px] text-ink-secondary">
-                              <p className="font-bold text-ink-primary flex items-center gap-1"><CalendarClock className="w-3 h-3" /> Re-appointment</p>
+                              <p className="font-bold text-ink-primary flex items-center gap-1"><CalendarClock className="w-3 h-3" /> Re-appointment / follow-up</p>
                               <p>{a.reappointment_date
-                                ? `${a.reappointment_date}${a.reappointment_time ? ' · ' + formatTime12(a.reappointment_time) : ''}`
-                                : 'No follow-up allotted yet.'}</p>
+                                ? `${a.reappointment_date}${a.reappointment_time ? ' · ' + formatTime12(a.reappointment_time) : ''}${a.reappointment_note ? ' — ' + a.reappointment_note : ''}`
+                                : a.status === 'COMPLETED'
+                                  ? 'Visit completed — you can request a follow-up below.'
+                                  : 'No follow-up allotted yet.'}</p>
                             </div>
-                            <button type="button" onClick={() => openPrescriptionDocument(a)}
-                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-bold bg-teal-brand text-white">
-                              <Download className="w-3 h-3" /> Download / Print prescription PDF
-                            </button>
+                            <div className="flex flex-wrap gap-2">
+                              <button type="button" onClick={() => openPrescriptionDocument(a)}
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-bold bg-teal-brand text-white">
+                                <Download className="w-3 h-3" /> Download / Print prescription PDF
+                              </button>
+                              {a.status === 'COMPLETED' && (
+                                <button
+                                  type="button"
+                                  onClick={() => requestFollowUp(a)}
+                                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-bold border border-teal-brand/40 bg-teal-50 text-teal-900"
+                                >
+                                  <CalendarPlus className="w-3 h-3" />
+                                  {a.reappointment_date ? 'Confirm follow-up booking' : 'Request follow-up'}
+                                </button>
+                              )}
+                            </div>
                           </div>
                         )}
                       </div>

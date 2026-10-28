@@ -101,6 +101,11 @@ export const AdminAppointmentsView: React.FC = () => {
   }, [emergencyTarget, emDate, slotOccupancy, emergencySlotCount]);
 
   const issuePrescription = (a: PatientAppointment) => {
+    const followDate = reDate || (() => {
+      const d = new Date();
+      d.setDate(d.getDate() + 7);
+      return d.toISOString().slice(0, 10);
+    })();
     updateAppointment(a.id, {
       status: 'COMPLETED',
       prescription: {
@@ -109,6 +114,10 @@ export const AdminAppointmentsView: React.FC = () => {
         issued_at: new Date().toLocaleString('en-IN', { hour12: true }),
         doctor_name: a.doctor_name,
       },
+      // Keep / set follow-up so patient can confirm from their portal
+      reappointment_date: a.reappointment_date || followDate,
+      reappointment_time: a.reappointment_time || reTime || '10:00',
+      reappointment_note: a.reappointment_note || reNote || 'Suggested follow-up after completed visit',
     });
     setPanelAppt(null);
   };
