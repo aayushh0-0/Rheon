@@ -22,9 +22,9 @@ import {
   EmergencyRequest,
   BloodRequestCreate,
 } from '../../types';
+import { AdaptiveReplanView } from './AdaptiveReplanView';
 import { useAuth } from '../../context/AuthContext';
 import { useRouter } from '../../context/RouterContext';
-import { AdminAppointmentsView } from './AdminAppointmentsView';
 
 export const AdminWorkspace: React.FC = () => {
   const { logout, switchRole } = useAuth();
@@ -41,7 +41,6 @@ export const AdminWorkspace: React.FC = () => {
     if (path.includes('/admin/matcher')) return 'candidate-matcher';
     if (path.includes('/admin/simulation')) return 'simulation-studio';
     if (path.includes('/admin/donors')) return 'donors-standby';
-    if (path.includes('/admin/appointments')) return 'appointments';
     return 'command-center';
   };
 
@@ -96,9 +95,6 @@ export const AdminWorkspace: React.FC = () => {
       case 'donors-standby':
         navigate('/admin/donors');
         break;
-      case 'appointments':
-        navigate('/admin/appointments');
-        break;
     }
   };
 
@@ -145,7 +141,6 @@ export const AdminWorkspace: React.FC = () => {
     try {
       const created = await createEmergencyRequest(newReq);
       setRequests((prev) => [created, ...prev]);
-      // Increment active emergency demands count
       setMetrics((prev) =>
         prev.map((m) =>
           m.id === 'critical-requests'
@@ -208,10 +203,11 @@ export const AdminWorkspace: React.FC = () => {
         {(activeTab === 'route-dispatch' || activeTab === 'drone-telemetry') && <LogisticsView />}
         {activeTab === 'safety-audit' && <SafetyAuditView />}
         {activeTab === 'facility-registry' && <FacilityRegistryView />}
-        {activeTab === 'appointments' && <AdminAppointmentsView />}
 
-        {/* Intelligence / Simulation / Standby View Placeholders */}
-        {['candidate-matcher', 'simulation-studio', 'donors-standby'].includes(activeTab) && (
+        {activeTab === 'simulation-studio' && <AdaptiveReplanView />}
+
+        {/* Remaining placeholders */}
+        {['candidate-matcher', 'donors-standby'].includes(activeTab) && (
           <div className="bg-white rounded-3xl p-12 text-center border border-shell-border shadow-card">
             <h3 className="text-lg font-bold text-ink-primary capitalize">
               {activeTab.replace('-', ' ')} Subsystem
