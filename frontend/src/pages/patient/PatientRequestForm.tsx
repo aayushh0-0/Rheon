@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   PlusCircle,
   ShieldCheck,
@@ -9,6 +9,8 @@ import {
   CheckCircle2,
   Navigation,
   ArrowRight,
+  LocateFixed,
+  MapPin,
 } from 'lucide-react';
 import { BloodGroup, ComponentType, UrgencyLevel, BloodRequestCreate } from '../../types';
 import { createEmergencyRequest } from '../../services/api';
@@ -39,14 +41,83 @@ export const PatientRequestForm: React.FC<PatientRequestFormProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [createdResult, setCreatedResult] = useState<PatientEmergencyRequest | null>(null);
 
+  /** Demonstration hospital nodes with approx. coords + verified unit counts (frontend demo). */
   const hospitalsList = [
-    { id: 'hosp-aiims-delhi', name: 'AIIMS New Delhi (Apex Trauma Centre)', zone: 'South Delhi' },
-    { id: 'hosp-safdarjung-delhi', name: 'Safdarjung Hospital Emergency Block', zone: 'South West Delhi' },
-    { id: 'hosp-max-saket', name: 'Max Super Speciality Hospital, Saket', zone: 'South Delhi' },
-    { id: 'hosp-apollo-sarita', name: 'Indraprastha Apollo Hospitals, Sarita Vihar', zone: 'South East Delhi' },
-    { id: 'hosp-fortis-escorts', name: 'Fortis Escorts Heart Institute, Okhla', zone: 'South East Delhi' },
-    { id: 'hosp-medanta-gurgaon', name: 'Medanta The Medicity, Gurugram', zone: 'Gurgaon NCR' },
+    { id: 'hosp-aiims-delhi', name: 'AIIMS New Delhi (Apex Trauma Centre)', zone: 'South Delhi', lat: 28.5672, lng: 77.2100, verified: { 'O-': 6, 'O+': 12, 'A+': 8, 'A-': 3, 'B+': 5, 'B-': 2, 'AB+': 2, 'AB-': 1 } as Record<string, number> },
+    { id: 'hosp-safdarjung-delhi', name: 'Safdarjung Hospital Emergency Block', zone: 'South West Delhi', lat: 28.5679, lng: 77.2080, verified: { 'O-': 4, 'O+': 10, 'A+': 6, 'A-': 2, 'B+': 4, 'B-': 1, 'AB+': 1, 'AB-': 1 } as Record<string, number> },
+    { id: 'hosp-max-saket', name: 'Max Super Speciality Hospital, Saket', zone: 'South Delhi', lat: 28.5273, lng: 77.2111, verified: { 'O-': 3, 'O+': 8, 'A+': 5, 'A-': 1, 'B+': 3, 'B-': 1, 'AB+': 1, 'AB-': 0 } as Record<string, number> },
+    { id: 'hosp-apollo-sarita', name: 'Indraprastha Apollo Hospitals, Sarita Vihar', zone: 'South East Delhi', lat: 28.5314, lng: 77.2896, verified: { 'O-': 5, 'O+': 9, 'A+': 4, 'A-': 2, 'B+': 4, 'B-': 2, 'AB+': 2, 'AB-': 1 } as Record<string, number> },
+    { id: 'hosp-fortis-escorts', name: 'Fortis Escorts Heart Institute, Okhla', zone: 'South East Delhi', lat: 28.5616, lng: 77.2732, verified: { 'O-': 2, 'O+': 7, 'A+': 5, 'A-': 1, 'B+': 3, 'B-': 1, 'AB+': 1, 'AB-': 0 } as Record<string, number> },
+    { id: 'hosp-medanta-gurgaon', name: 'Medanta The Medicity, Gurugram', zone: 'Gurgaon NCR', lat: 28.4395, lng: 77.0405, verified: { 'O-': 4, 'O+': 6, 'A+': 4, 'A-': 1, 'B+': 2, 'B-': 1, 'AB+': 1, 'AB-': 1 } as Record<string, number> },
   ];
+
+  const [userCoords, setUserCoords] = useState<{ lat: number; lng: number } | null>(null);
+  const [locating, setLocating] = useState(false);
+  const [locationError, setLocationError] = useState<string | null>(null);
+  const [filterNearestOnly, setFilterNearestOnly] = useState(false);
+
+  const haversineKm = (a: { lat: number; lng: number }, b: { lat: number; lng: number }) => {
+    const R = 6371;
+    const dLat = ((b.lat - a.lat) * Math.PI) / 180;
+    const dLng = ((b.lng - a.lng) * Math.PI) / 180;
+    const la1 = (a.lat * Math.PI) / 180;
+    const la2 = (b.lat * Math.PI) / 180;
+    const h = Math.sin(dLat / 2) ** 2 + Math.cos(la1) * Math.cos(la2) * Math.sin(dLng / 2) ** 2;
+    return 2 * R * Math.asin(Math.sqrt(h));
+  };
+
+  const eligibleHospitals = useMemo(() => {
+    const need = Math.max(1, units);
+    let list = hospitalsList
+      .map((h) => {
+        const verifiedUnits = h.verified[bloodGroup] ?? 0;
+        const distance_km = userCoords ? haversineKm(userCoords, { lat: h.lat, lng: h.lng }) : undefined;
+        return { ...h, verifiedUnits, distance_km, hasStock: verifiedUnits >= need };
+      })
+      .filter((h) => h.hasStock);
+
+    if (filterNearestOnly && userCoords) {
+      list = [...list].sort((a, b) => (a.distance_km ?? 999) - (b.distance_km ?? 999));
+    } else if (userCoords) {
+      list = [...list].sort((a, b) => (a.distance_km ?? 999) - (b.distance_km ?? 999));
+    } else {
+      list = [...list].sort((a, b) => b.verifiedUnits - a.verifiedUnits);
+    }
+    return list;
+  }, [bloodGroup, units, userCoords, filterNearestOnly]);
+
+  // Keep hospital selection valid when group/units/location filters change
+  useEffect(() => {
+    if (eligibleHospitals.length === 0) return;
+    if (!eligibleHospitals.some((h) => h.id === hospitalId)) {
+      setHospitalId(eligibleHospitals[0].id);
+    }
+  }, [eligibleHospitals, hospitalId]);
+
+  const useMyLocation = () => {
+    setLocationError(null);
+    if (!navigator.geolocation) {
+      setLocationError('Geolocation is not supported in this browser.');
+      return;
+    }
+    setLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setUserCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+        setFilterNearestOnly(true);
+        setLocating(false);
+      },
+      (err) => {
+        setLocating(false);
+        setLocationError(
+          err.code === 1
+            ? 'Location permission denied. Allow location to rank nearest hospitals.'
+            : 'Could not read current location. Try again or pick a hospital manually.'
+        );
+      },
+      { enableHighAccuracy: true, timeout: 12000, maximumAge: 60_000 }
+    );
+  };
 
   const componentDescriptions: Record<ComponentType, string> = {
     RBC: 'Red Blood Cells — Oxygen carrying capacity for trauma, surgery, or severe anemia',
@@ -193,23 +264,97 @@ export const PatientRequestForm: React.FC<PatientRequestFormProps> = ({
       )}
 
       <form onSubmit={handleSubmit} className="mt-6 space-y-5">
-        {/* Destination Hospital Selection */}
-        <div>
+        {/* Destination Hospital Selection — location + verified stock */}
+        <div className="space-y-2">
           <label className="block text-xs font-bold text-ink-primary mb-1.5 flex items-center gap-1.5">
             <Building2 className="w-3.5 h-3.5 text-teal-brand" />
             Receiving Hospital / Trauma Center
           </label>
-          <select
-            value={hospitalId}
-            onChange={(e) => setHospitalId(e.target.value)}
-            className="w-full px-4 py-2.5 bg-shell-bg border border-shell-border rounded-xl text-xs sm:text-sm text-ink-primary focus:outline-none focus:ring-2 focus:ring-teal-brand/20 focus:border-teal-brand transition-all"
-          >
-            {hospitalsList.map((h) => (
-              <option key={h.id} value={h.id}>
-                {h.name} — ({h.zone})
-              </option>
-            ))}
-          </select>
+
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 p-3 rounded-2xl border border-shell-border bg-shell-bg/50">
+            <div className="flex-1 min-w-0">
+              <p className="text-[11px] font-bold text-ink-primary flex items-center gap-1">
+                <LocateFixed className="w-3.5 h-3.5 text-teal-brand" />
+                Share current location
+              </p>
+              <p className="text-[10px] text-ink-secondary mt-0.5">
+                Ranks nearest hospitals that have verified demo units for the selected blood group.
+                {userCoords && (
+                  <span className="text-teal-brand font-semibold">
+                    {' '}Location set ({userCoords.lat.toFixed(3)}, {userCoords.lng.toFixed(3)})
+                  </span>
+                )}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={useMyLocation}
+              disabled={locating}
+              className="shrink-0 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-full text-[11px] font-bold bg-teal-brand text-white disabled:opacity-50"
+            >
+              <Navigation className="w-3.5 h-3.5" />
+              {locating ? 'Locating…' : userCoords ? 'Update location' : 'Use my current location'}
+            </button>
+          </div>
+          {locationError && (
+            <p className="text-[11px] text-crimson font-medium flex items-center gap-1">
+              <AlertCircle className="w-3.5 h-3.5" /> {locationError}
+            </p>
+          )}
+
+          {eligibleHospitals.length === 0 ? (
+            <div className="p-3 rounded-xl border border-amber-200 bg-amber-50 text-[11px] text-amber-900">
+              No registered hospital currently shows enough verified units for <strong>{bloodGroup}</strong> ({units}u needed).
+              Try another blood group or lower units.
+            </div>
+          ) : (
+            <>
+              <select
+                value={hospitalId}
+                onChange={(e) => setHospitalId(e.target.value)}
+                className="w-full px-4 py-2.5 bg-shell-bg border border-shell-border rounded-xl text-xs sm:text-sm text-ink-primary focus:outline-none focus:ring-2 focus:ring-teal-brand/20 focus:border-teal-brand transition-all"
+              >
+                {eligibleHospitals.map((h) => (
+                  <option key={h.id} value={h.id}>
+                    {h.name} — {h.zone}
+                    {h.distance_km != null ? ` · ${h.distance_km.toFixed(1)} km` : ''}
+                    {` · ${h.verifiedUnits}u ${bloodGroup} verified`}
+                  </option>
+                ))}
+              </select>
+              <ul className="space-y-1.5 max-h-40 overflow-y-auto">
+                {eligibleHospitals.slice(0, 6).map((h, i) => (
+                  <li key={h.id}>
+                    <button
+                      type="button"
+                      onClick={() => setHospitalId(h.id)}
+                      className={`w-full text-left px-3 py-2 rounded-xl border text-[11px] transition-colors ${
+                        hospitalId === h.id
+                          ? 'border-teal-brand bg-teal-brand/5'
+                          : 'border-shell-border hover:border-teal-brand/40'
+                      }`}
+                    >
+                      <span className="font-bold text-ink-primary">
+                        {userCoords && i === 0 ? 'Nearest · ' : ''}
+                        {h.name}
+                      </span>
+                      <span className="block text-ink-secondary mt-0.5">
+                        <MapPin className="w-3 h-3 inline mr-0.5" />
+                        {h.zone}
+                        {h.distance_km != null ? ` · ${h.distance_km.toFixed(1)} km away` : ''}
+                        {' · '}
+                        <span className="text-teal-brand font-semibold">{h.verifiedUnits} verified {bloodGroup} units</span>
+                      </span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              <p className="text-[10px] text-ink-secondary">
+                Only hospitals with verified demonstration stock ≥ {units} unit(s) of {bloodGroup} are listed
+                {userCoords ? ', sorted nearest first.' : '.'}
+              </p>
+            </>
+          )}
         </div>
 
         {/* Patient & Attendant Contact */}

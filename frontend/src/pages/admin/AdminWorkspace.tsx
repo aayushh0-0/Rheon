@@ -33,8 +33,8 @@ export const AdminWorkspace: React.FC = () => {
   // Map route path to NavItem
   const getTabFromPath = (): NavItem => {
     if (path.includes('/admin/inventory')) return 'inventory-reserves';
-    if (path.includes('/admin/logistics')) return 'route-dispatch';
-    if (path.includes('/admin/telemetry')) return 'drone-telemetry';
+    // Route Dispatch and former Drone Telemetry both resolve to logistics
+    if (path.includes('/admin/logistics') || path.includes('/admin/telemetry')) return 'route-dispatch';
     if (path.includes('/admin/safety')) return 'safety-audit';
     if (path.includes('/admin/facilities')) return 'facility-registry';
     if (path.includes('/admin/requests')) return 'emergency-requests';
@@ -75,10 +75,8 @@ export const AdminWorkspace: React.FC = () => {
         navigate('/admin/inventory');
         break;
       case 'route-dispatch':
-        navigate('/admin/logistics');
-        break;
       case 'drone-telemetry':
-        navigate('/admin/telemetry');
+        navigate('/admin/logistics');
         break;
       case 'safety-audit':
         navigate('/admin/safety');
@@ -173,6 +171,7 @@ export const AdminWorkspace: React.FC = () => {
       >
         {activeTab === 'command-center' && (
           <CommandCenter
+            variant="overview"
             metrics={metrics}
             inventoryDistribution={inventoryDistribution}
             demandData={demandData}
@@ -187,6 +186,7 @@ export const AdminWorkspace: React.FC = () => {
 
         {activeTab === 'emergency-requests' && (
           <CommandCenter
+            variant="queue"
             metrics={metrics}
             inventoryDistribution={inventoryDistribution}
             demandData={demandData}
