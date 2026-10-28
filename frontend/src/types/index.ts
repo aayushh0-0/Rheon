@@ -35,7 +35,8 @@ export type NavItem =
   | 'safety-audit'
   | 'simulation-studio'
   | 'facility-registry'
-  | 'donors-standby';
+  | 'donors-standby'
+  | 'appointments';
 
 export interface BloodRequestCreate {
   hospital_id: string;

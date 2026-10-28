@@ -83,51 +83,75 @@ export const PatientOverview: React.FC<PatientOverviewProps> = ({
         </a>
       </div>
 
-      {/* 4 Summary Cards */}
+      {/* 4 Summary Cards — clickable */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-4 rounded-2xl bg-white border border-shell-border shadow-card flex items-center justify-between">
+        <button
+          type="button"
+          onClick={onGoToRequests}
+          className="p-4 rounded-2xl bg-white border border-shell-border shadow-card flex items-center justify-between text-left hover:border-teal-brand/40 hover:shadow-md transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-teal-brand/30"
+        >
           <div>
             <span className="text-xs font-bold text-ink-secondary uppercase">Your Requests</span>
             <p className="text-2xl font-extrabold text-ink-primary mt-1">{patientRequests.length}</p>
-            <span className="text-[11px] text-ink-secondary">Submitted this session</span>
+            <span className="text-[11px] text-ink-secondary">Submitted this session · Open list</span>
           </div>
           <div className="w-10 h-10 rounded-xl bg-pastel-mint-bg text-pastel-mint-text flex items-center justify-center">
             <HeartPulse className="w-5 h-5" />
           </div>
-        </div>
+        </button>
 
-        <div className="p-4 rounded-2xl bg-white border border-shell-border shadow-card flex items-center justify-between">
+        <button
+          type="button"
+          onClick={() => {
+            const active = patientRequests.find((r) => r.status === 'DISPATCHED') || patientRequests[0];
+            if (active) onTrackRequest(active.id);
+            else onGoToRequests();
+          }}
+          className="p-4 rounded-2xl bg-white border border-shell-border shadow-card flex items-center justify-between text-left hover:border-teal-brand/40 hover:shadow-md transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-teal-brand/30"
+        >
           <div>
             <span className="text-xs font-bold text-ink-secondary uppercase">In Transit / Active</span>
             <p className="text-2xl font-extrabold text-teal-brand mt-1">{dispatchedCount}</p>
-            <span className="text-[11px] text-emerald-700 font-medium">Real-time GPS monitored</span>
+            <span className="text-[11px] text-emerald-700 font-medium">Real-time GPS · Track now</span>
           </div>
           <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
             <Navigation className="w-5 h-5" />
           </div>
-        </div>
+        </button>
 
-        <div className="p-4 rounded-2xl bg-white border border-shell-border shadow-card flex items-center justify-between">
+        <button
+          type="button"
+          onClick={onGoToRequests}
+          className="p-4 rounded-2xl bg-white border border-shell-border shadow-card flex items-center justify-between text-left hover:border-teal-brand/40 hover:shadow-md transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-teal-brand/30"
+        >
           <div>
             <span className="text-xs font-bold text-ink-secondary uppercase">Units Requested</span>
             <p className="text-2xl font-extrabold text-ink-primary mt-1">{totalUnits}</p>
-            <span className="text-[11px] text-ink-secondary">Blood & components</span>
+            <span className="text-[11px] text-ink-secondary">Blood & components · Details</span>
           </div>
           <div className="w-10 h-10 rounded-xl bg-pastel-rose-bg text-pastel-rose-text flex items-center justify-center">
             <Droplets className="w-5 h-5" />
           </div>
-        </div>
+        </button>
 
-        <div className="p-4 rounded-2xl bg-white border border-shell-border shadow-card flex items-center justify-between">
+        <button
+          type="button"
+          onClick={() => {
+            const active = patientRequests.find((r) => r.status === 'DISPATCHED') || patientRequests[0];
+            if (active) onTrackRequest(active.id);
+            else onGoToRequest();
+          }}
+          className="p-4 rounded-2xl bg-white border border-shell-border shadow-card flex items-center justify-between text-left hover:border-teal-brand/40 hover:shadow-md transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-teal-brand/30"
+        >
           <div>
             <span className="text-xs font-bold text-ink-secondary uppercase">Safety Verified</span>
             <p className="text-2xl font-extrabold text-emerald-700 mt-1">100%</p>
-            <span className="text-[11px] text-emerald-700 font-medium">Deterministic 6-Point Gate</span>
+            <span className="text-[11px] text-emerald-700 font-medium">6-Point Gate · View status</span>
           </div>
           <div className="w-10 h-10 rounded-xl bg-pastel-lime-bg text-pastel-lime-text flex items-center justify-center">
             <ShieldCheck className="w-5 h-5" />
           </div>
-        </div>
+        </button>
       </div>
 
       {/* Latest Active Request Banner or Empty State */}

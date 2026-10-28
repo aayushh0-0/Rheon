@@ -1,6 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Download, FileText, ShieldCheck, ArrowLeft, ExternalLink, Trash2 } from 'lucide-react';
 import { medicalApi, MedicalReport } from '../../services/medicalApi';
+import { openHealthReportDocument, downloadHealthReportDocument } from '../../utils/healthReportPdf';
+
+function getPatientPhotoFromAppointments(): string | null {
+  try {
+    const raw = localStorage.getItem('rheon_patient_appointments_v1');
+    if (!raw) return null;
+    const list = JSON.parse(raw);
+    if (!Array.isArray(list)) return null;
+    for (const a of list) {
+      if (a && typeof a.patient_photo === 'string' && a.patient_photo.startsWith('data:image/')) {
+        return a.patient_photo;
+      }
+    }
+  } catch { /* ignore */ }
+  return null;
+}
 
 interface DownloadableReportsViewProps {
   onBack: () => void;
@@ -33,22 +49,22 @@ export const DownloadableReportsView: React.FC<DownloadableReportsViewProps> = (
   };
 
   const handleDownloadPDF = () => {
-    const element = document.createElement('a');
-    const file = new Blob([
-      `RHEON AI - OFFICIAL HEALTH SUMMARY REPORT\n` +
-      `Report ID: ${currentReport?.id || 'demo'}\n` +
-      `Patient ID: Priya Sharma (patient-priya-01)\n` +
-      `Date: ${new Date().toLocaleString()}\n` +
-      `Status: VERIFIED & CERTIFIED\n\n` +
-      `Summary: ${currentReport?.summary || 'No summary'}\n\n` +
-      `Measurements:\n` +
-      (currentReport?.measurements || []).map(m => `- ${m.parameter_name}: ${m.value} ${m.unit || ''} [Ref: ${m.reference_range || 'N/A'}] (${m.status})`).join('\n')
-    ], { type: 'text/plain' });
-    element.href = URL.createObjectURL(file);
-    element.download = `rheon_health_summary_${currentReport?.patient_id || 'priya'}.pdf`;
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
+    if (!currentReport) {
+      window.alert('Select a report first.');
+      return;
+    }
+    // File download (branded HTML template) + open print-ready preview
+    const photo = getPatientPhotoFromAppointments();
+    downloadHealthReportDocument(currentReport, 'Priya Sharma', photo);
+    openHealthReportDocument(currentReport, 'Priya Sharma', photo);
+  };
+
+  const handlePreviewPDF = () => {
+    if (!currentReport) {
+      window.alert('Select a report first.');
+      return;
+    }
+    openHealthReportDocument(currentReport, 'Priya Sharma', getPatientPhotoFromAppointments());
   };
 
   return (

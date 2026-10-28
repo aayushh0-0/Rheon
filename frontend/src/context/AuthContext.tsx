@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { UserRole, AuthUser, PatientEmergencyRequest } from '../types/auth';
-import { PatientAppointment } from '../types/appointments';
+import { PatientAppointment, AppointmentStatus } from '../types/appointments';
 
 interface AuthContextType {
   user: AuthUser | null;
@@ -15,7 +15,11 @@ interface AuthContextType {
   getPatientRequestById: (id: string) => PatientEmergencyRequest | undefined;
   appointments: PatientAppointment[];
   addAppointment: (appt: PatientAppointment) => void;
+  updateAppointment: (id: string, patch: Partial<PatientAppointment>) => void;
+  updateAppointmentStatus: (id: string, status: AppointmentStatus) => void;
   bookedSlotKeys: Set<string>;
+  slotOccupancy: (doctorId: string, date: string, time: string) => number;
+  emergencySlotCount: (doctorId: string, date: string, time: string) => number;
 }
 
 const STORAGE_KEY = 'rheon_demo_session';
@@ -64,6 +68,19 @@ const INITIAL_SAMPLE_PATIENT_REQUEST: PatientEmergencyRequest = {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+function loadAppointmentsFromStorage(): PatientAppointment[] {
+  try {
+    const raw = localStorage.getItem(APPOINTMENTS_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) return parsed;
+    }
+  } catch {
+    /* ignore */
+  }
+  return [];
+}
+
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<AuthUser | null>(() => {
     try {
@@ -92,7 +109,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch {
       // Fallback
     }
-    // Initialize with one demo request associated with this demo patient session
     return [INITIAL_SAMPLE_PATIENT_REQUEST];
   });
 
@@ -134,22 +150,40 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     login(newRole);
   }, [login]);
 
-  const [appointments, setAppointments] = useState<PatientAppointment[]>(() => {
-    try {
-      const raw = localStorage.getItem(APPOINTMENTS_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed)) return parsed;
-      }
-    } catch { /* ignore */ }
-    return [];
-  });
+  const [appointments, setAppointments] = useState<PatientAppointment[]>(() => loadAppointmentsFromStorage());
 
+  // Persist + cross-tab sync so patient booking appears for admin without refresh races
   useEffect(() => {
     try {
       localStorage.setItem(APPOINTMENTS_KEY, JSON.stringify(appointments));
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
   }, [appointments]);
+
+  useEffect(() => {
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === APPOINTMENTS_KEY) {
+        setAppointments(loadAppointmentsFromStorage());
+      }
+    };
+    // Re-hydrate when window regains focus (role switch in same tab already shares state)
+    const onFocus = () => {
+      const latest = loadAppointmentsFromStorage();
+      setAppointments((prev) => {
+        if (latest.length !== prev.length) return latest;
+        const prevIds = prev.map((a) => `${a.id}:${a.status}`).join('|');
+        const nextIds = latest.map((a) => `${a.id}:${a.status}`).join('|');
+        return prevIds === nextIds ? prev : latest;
+      });
+    };
+    window.addEventListener('storage', onStorage);
+    window.addEventListener('focus', onFocus);
+    return () => {
+      window.removeEventListener('storage', onStorage);
+      window.removeEventListener('focus', onFocus);
+    };
+  }, []);
 
   const addPatientRequest = useCallback((req: PatientEmergencyRequest) => {
     setPatientRequests((prev) => [req, ...prev]);
@@ -164,8 +198,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [patientRequests]);
 
   const addAppointment = useCallback((appt: PatientAppointment) => {
-    setAppointments((prev) => [appt, ...prev]);
+    setAppointments((prev) => {
+      const next = [appt, ...prev.filter((a) => a.id !== appt.id)];
+      try {
+        localStorage.setItem(APPOINTMENTS_KEY, JSON.stringify(next));
+      } catch {
+        /* ignore */
+      }
+      return next;
+    });
   }, []);
+
+  const updateAppointment = useCallback((id: string, patch: Partial<PatientAppointment>) => {
+    setAppointments((prev) => {
+      const next = prev.map((a) => (a.id === id ? { ...a, ...patch } : a));
+      try {
+        localStorage.setItem(APPOINTMENTS_KEY, JSON.stringify(next));
+      } catch {
+        /* ignore */
+      }
+      return next;
+    });
+  }, []);
+
+  const updateAppointmentStatus = useCallback((id: string, status: AppointmentStatus) => {
+    updateAppointment(id, { status });
+  }, [updateAppointment]);
 
   const bookedSlotKeys = useMemo(() => {
     const s = new Set<string>();
@@ -175,6 +233,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
     return s;
   }, [appointments]);
+
+  const slotOccupancy = useCallback(
+    (doctorId: string, date: string, time: string) => {
+      return appointments.filter(
+        (a) =>
+          a.status !== 'CANCELLED' &&
+          a.doctor_id === doctorId &&
+          a.date === date &&
+          a.time === time
+      ).length;
+    },
+    [appointments]
+  );
+
+  const emergencySlotCount = useCallback(
+    (doctorId: string, date: string, time: string) => {
+      return appointments.filter(
+        (a) =>
+          a.status !== 'CANCELLED' &&
+          a.is_emergency_slot &&
+          a.doctor_id === doctorId &&
+          a.date === date &&
+          a.time === time
+      ).length;
+    },
+    [appointments]
+  );
 
   return (
     <AuthContext.Provider
@@ -191,7 +276,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         getPatientRequestById,
         appointments,
         addAppointment,
+        updateAppointment,
+        updateAppointmentStatus,
         bookedSlotKeys,
+        slotOccupancy,
+        emergencySlotCount,
       }}
     >
       {children}

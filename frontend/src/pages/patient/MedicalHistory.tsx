@@ -1,6 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { FileText, Download, ArrowUpRight, Search } from 'lucide-react';
 import { medicalApi, MedicalReport } from '../../services/medicalApi';
+import { openHealthReportDocument } from '../../utils/healthReportPdf';
+
+function getPatientPhotoFromAppointments(): string | null {
+  try {
+    const raw = localStorage.getItem('rheon_patient_appointments_v1');
+    if (!raw) return null;
+    const list = JSON.parse(raw);
+    if (!Array.isArray(list)) return null;
+    for (const a of list) {
+      if (a && typeof a.patient_photo === 'string' && a.patient_photo.startsWith('data:image/')) {
+        return a.patient_photo;
+      }
+    }
+  } catch { /* ignore */ }
+  return null;
+}
 import { PatientTab } from './PatientShell';
 
 interface MedicalHistoryProps {
@@ -122,7 +138,8 @@ export const MedicalHistory: React.FC<MedicalHistoryProps> = ({ onNavigateTab })
                       <ArrowUpRight className="w-3 h-3 text-teal-brand" />
                     </button>
                     <button
-                      onClick={() => onNavigateTab('pdf')}
+                      type="button"
+                      onClick={() => openHealthReportDocument(r, 'Priya Sharma', getPatientPhotoFromAppointments())}
                       className="px-3 py-1.5 bg-teal-brand hover:bg-teal-brand-hover text-white rounded-xl font-bold text-[11px] inline-flex items-center gap-1 shadow-xs"
                     >
                       <Download className="w-3 h-3" />

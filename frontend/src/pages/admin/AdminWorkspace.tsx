@@ -23,6 +23,8 @@ import {
   BloodRequestCreate,
 } from '../../types';
 import { AdaptiveReplanView } from './AdaptiveReplanView';
+import { CandidateMatcherView } from './CandidateMatcherView';
+import { AdminAppointmentsView } from './AdminAppointmentsView';
 import { useAuth } from '../../context/AuthContext';
 import { useRouter } from '../../context/RouterContext';
 
@@ -41,6 +43,7 @@ export const AdminWorkspace: React.FC = () => {
     if (path.includes('/admin/matcher')) return 'candidate-matcher';
     if (path.includes('/admin/simulation')) return 'simulation-studio';
     if (path.includes('/admin/donors')) return 'donors-standby';
+    if (path.includes('/admin/appointments')) return 'appointments';
     return 'command-center';
   };
 
@@ -92,6 +95,9 @@ export const AdminWorkspace: React.FC = () => {
         break;
       case 'donors-standby':
         navigate('/admin/donors');
+        break;
+      case 'appointments':
+        navigate('/admin/appointments');
         break;
     }
   };
@@ -206,11 +212,14 @@ export const AdminWorkspace: React.FC = () => {
 
         {activeTab === 'simulation-studio' && <AdaptiveReplanView />}
 
+        {activeTab === 'candidate-matcher' && <CandidateMatcherView />}
+        {activeTab === 'appointments' && <AdminAppointmentsView />}
+
         {/* Remaining placeholders */}
-        {['candidate-matcher', 'donors-standby'].includes(activeTab) && (
+        {activeTab === 'donors-standby' && (
           <div className="bg-white rounded-3xl p-12 text-center border border-shell-border shadow-card">
             <h3 className="text-lg font-bold text-ink-primary capitalize">
-              {activeTab.replace('-', ' ')} Subsystem
+              donors standby Subsystem
             </h3>
             <p className="text-xs text-ink-secondary mt-1">
               Deterministic multi-factor calculation engine running live in background across 13 Delhi NCR nodes.
